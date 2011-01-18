@@ -154,7 +154,7 @@ public class Channel implements Iterable<Frame> {
 	}
 
 	public Iterator<Frame> iterator() {
-		Vector<Frame> frames = new Vector(100);
+		Vector<Frame> frames = new Vector<Frame>(100);
 		Iterator<Frame> frameIterator = frames.iterator();
 		return frameIterator;
 	}

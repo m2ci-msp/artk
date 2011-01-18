@@ -69,6 +69,7 @@ public class Sweep {
 		return;
 	}
 	
+	@SuppressWarnings("unused")
 	public static void main(String[] args) throws IOException {
 		Sweep s = new Sweep();
 		s.loadFromFiles(args[0], args[1]);
