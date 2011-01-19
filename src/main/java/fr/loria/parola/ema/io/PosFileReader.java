@@ -26,7 +26,7 @@ public class PosFileReader {
 		buffer.order(ByteOrder.LITTLE_ENDIAN);
 	}
 
-	public FloatMatrix1D get1DSamples() {
+	public FloatMatrix1D getSamples1D() {
 		buffer.rewind();
 		int numFloats = buffer.limit() / (Float.SIZE * Byte.SIZE);
 		float[] samples = new float[numFloats];
@@ -37,8 +37,8 @@ public class PosFileReader {
 		return matrix;
 	}
 
-	public FloatMatrix2D get2DSamples(int numberOfTracks) {
-		FloatMatrix1D flatData = get1DSamples();
+	public FloatMatrix2D getSamples2D(int numberOfTracks) {
+		FloatMatrix1D flatData = getSamples1D();
 		int numberOfSamples = (int) (flatData.size() / numberOfTracks);
 		FloatMatrix2D data = flatData.reshape(numberOfTracks, numberOfSamples);
 		return data;

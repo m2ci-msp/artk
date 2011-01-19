@@ -2,18 +2,9 @@ package fr.loria.parole.ema;
 
 import java.util.HashMap;
 
-import com.ibm.icu.lang.UCharacter;
-
 public class Frame {
 	private String name;
-	private HashMap<String, Float> values = new HashMap<String, Float>();
-	private String X = "X";
-	private String Y = "Y";
-	private String Z = "Z";
-	private String PHI = String.valueOf((char) UCharacter.getCharFromName("GREEK CAPITAL LETTER PHI"));
-	private String THETA = String.valueOf((char) UCharacter.getCharFromName("GREEK CAPITAL LETTER THETA"));
-	private String RMS = "RMS";
-	private String EXTRA = "Extra";
+	private HashMap<String, Float> values = new HashMap<String, Float>(Descriptor.NUM_DIMENSIONS_PER_COIL);
 
 	/**
 	 * Frame constructor
@@ -57,7 +48,7 @@ public class Frame {
 	 * @return the x
 	 */
 	public float getX() {
-		return values.get(X);
+		return values.get(Descriptor.X);
 	}
 
 	/**
@@ -65,14 +56,14 @@ public class Frame {
 	 *            the x to set
 	 */
 	public void setX(float x2) {
-		values.put(X, x2);
+		values.put(Descriptor.X, x2);
 	}
 
 	/**
 	 * @return the y
 	 */
 	public float getY() {
-		return values.get(Y);
+		return values.get(Descriptor.Y);
 	}
 
 	/**
@@ -80,14 +71,14 @@ public class Frame {
 	 *            the y to set
 	 */
 	public void setY(float y2) {
-		values.put(Y, y2);
+		values.put(Descriptor.Y, y2);
 	}
 
 	/**
 	 * @return the z
 	 */
 	public float getZ() {
-		return values.get(Z);
+		return values.get(Descriptor.Z);
 	}
 
 	/**
@@ -95,14 +86,14 @@ public class Frame {
 	 *            the z to set
 	 */
 	public void setZ(float z) {
-		values.put(Z, z);
+		values.put(Descriptor.Z, z);
 	}
 
 	/**
 	 * @return the phi
 	 */
 	public float getPhi() {
-		return values.get(PHI);
+		return values.get(Descriptor.PHI);
 	}
 
 	/**
@@ -110,14 +101,14 @@ public class Frame {
 	 *            the phi to set
 	 */
 	public void setPhi(float phi) {
-		values.put(PHI, phi);
+		values.put(Descriptor.PHI, phi);
 	}
 
 	/**
 	 * @return the theta
 	 */
 	public float getTheta() {
-		return values.get(THETA);
+		return values.get(Descriptor.THETA);
 	}
 
 	/**
@@ -125,14 +116,14 @@ public class Frame {
 	 *            the theta to set
 	 */
 	public void setTheta(float theta) {
-		values.put(THETA, theta);
+		values.put(Descriptor.THETA, theta);
 	}
 
 	/**
 	 * @return the rms
 	 */
 	public float getRms() {
-		return values.get(RMS);
+		return values.get(Descriptor.RMS);
 	}
 
 	/**
@@ -140,14 +131,14 @@ public class Frame {
 	 *            the rms to set
 	 */
 	public void setRms(float rms) {
-		values.put(RMS, rms);
+		values.put(Descriptor.RMS, rms);
 	}
 
 	/**
 	 * @return the extra
 	 */
 	public float getExtra() {
-		return values.get(EXTRA);
+		return values.get(Descriptor.EXTRA);
 	}
 
 	/**
@@ -155,12 +146,13 @@ public class Frame {
 	 *            the extra to set
 	 */
 	public void setExtra(float extra) {
-		values.put(EXTRA, extra);
+		values.put(Descriptor.EXTRA, extra);
 	}
 
 	public String toString() {
-		return String.format("%s:\n%7s: %10f\n%7s: %10f\n%7s: %10f\n%7s: %10f\n%7s: %10f\n%7s: %10f\n%7s: %10f\n", getName(), X,
-				getX(), Y, getY(), Z, getZ(), PHI, getPhi(), THETA, getTheta(), RMS, getRms(), EXTRA, getExtra());
+		return String.format("%s:\n%7s: %10f\n%7s: %10f\n%7s: %10f\n%7s: %10f\n%7s: %10f\n%7s: %10f\n%7s: %10f\n", getName(),
+				Descriptor.X, getX(), Descriptor.Y, getY(), Descriptor.Z, getZ(), Descriptor.PHI, getPhi(), Descriptor.THETA,
+				getTheta(), Descriptor.RMS, getRms(), Descriptor.EXTRA, getExtra());
 	}
 
 	public boolean equals(Frame other) {

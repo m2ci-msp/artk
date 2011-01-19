@@ -44,7 +44,7 @@ public class Sweep {
 		String[] trackNames = headerFileReader.getNames();
 		int numTracks = trackNames.length;
 		PosFileReader posFileReader = new PosFileReader(posFileName);
-		FloatMatrix2D data = posFileReader.get2DSamples(numTracks);
+		FloatMatrix2D data = posFileReader.getSamples2D(numTracks);
 
 		Track[] tracks = new Track[numTracks];
 		for (int t = 0; t < numTracks; t++) {
@@ -74,7 +74,7 @@ public class Sweep {
 		Sweep s = new Sweep();
 		s.loadFromFiles(args[0], args[1]);
 		Channel foo = s.getChannelByName("Ch1_X");
-		Frame bar = foo.getFrame(5);
+//		Frame bar = foo.getFrame(5);
 		int x = 0;
 	}
 }
