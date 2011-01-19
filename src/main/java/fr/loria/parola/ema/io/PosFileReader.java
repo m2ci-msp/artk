@@ -7,6 +7,10 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
 
+import cern.colt.matrix.tfloat.FloatMatrix1D;
+import cern.colt.matrix.tfloat.FloatMatrix2D;
+import cern.colt.matrix.tfloat.impl.DenseFloatMatrix1D;
+
 public class PosFileReader {
 	private ByteBuffer buffer;
 
@@ -22,30 +26,21 @@ public class PosFileReader {
 		buffer.order(ByteOrder.LITTLE_ENDIAN);
 	}
 
-	public float[] getFlatData() {
+	public FloatMatrix1D get1DSamples() {
 		buffer.rewind();
-		float[] data = new float[buffer.limit() / (Float.SIZE * Byte.SIZE)];
-		for (int i = 0; i < data.length; i++) {
-			data[i] = buffer.getFloat();
+		int numFloats = buffer.limit() / (Float.SIZE * Byte.SIZE);
+		float[] samples = new float[numFloats];
+		for (int i = 0; i < numFloats; i++) {
+			samples[i] = buffer.getFloat();
 		}
-		return data;
+		FloatMatrix1D matrix = new DenseFloatMatrix1D(samples);
+		return matrix;
 	}
 
-	public float[][] getData(int ntracks) {
-		float[] flatData = getFlatData();
-		assert flatData.length % ntracks == 0;
-		int nsamples = flatData.length / ntracks;
-		float[][] data = new float[ntracks][];
-		int d = 0;
-		for (int s = 0; s < nsamples; s++) {
-			for (int t = 0; t < ntracks; t++) {
-				if (s == 0) {
-					data[t] = new float[nsamples];
-				}
-				data[t][s] = flatData[d];
-				d++;
-			}
-		}
+	public FloatMatrix2D get2DSamples(int numberOfTracks) {
+		FloatMatrix1D flatData = get1DSamples();
+		int numberOfSamples = (int) (flatData.size() / numberOfTracks);
+		FloatMatrix2D data = flatData.reshape(numberOfTracks, numberOfSamples);
 		return data;
 	}
 	

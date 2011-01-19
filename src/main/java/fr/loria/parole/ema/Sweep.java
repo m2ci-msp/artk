@@ -3,6 +3,9 @@ package fr.loria.parole.ema;
 
 import java.io.IOException;
 import java.util.Vector;
+
+import cern.colt.matrix.DoubleMatrix2D;
+import cern.colt.matrix.tfloat.FloatMatrix2D;
 import fr.loria.parola.ema.io.HeaderFileReader;
 import fr.loria.parola.ema.io.PosFileReader;
 
@@ -43,13 +46,11 @@ public class Sweep {
 		String[] trackNames = headerFileReader.getNames();
 		int numTracks = trackNames.length;
 		PosFileReader posFileReader = new PosFileReader(posFileName);
-		float[][] data = posFileReader.getData(numTracks);
-		
-		assert trackNames.length == data.length;
-		
+		FloatMatrix2D data = posFileReader.get2DSamples(numTracks);
+				
 		Track[] tracks = new Track[numTracks];
 		for (int t = 0; t < numTracks; t++) {
-			tracks[t] = new Track(trackNames[t], data[t]);
+			tracks[t] = new Track(trackNames[t], data.viewRow(t).toArray());
 		}
 		
 		int t = 0;

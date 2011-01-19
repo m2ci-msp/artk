@@ -16,6 +16,29 @@ public class Frame {
 	private String EXTRA = "Extra";
 
 	/**
+	 * Frame constructor
+	 * 
+	 * @param name
+	 * @param x2
+	 * @param y2
+	 * @param z2
+	 * @param phi2
+	 * @param theta2
+	 * @param rms2
+	 * @param extra2
+	 */
+	public Frame(String name, float x2, float y2, float z2, float phi2, float theta2, float rms2, float extra2) {
+		setName(name);
+		setX(x2);
+		setY(y2);
+		setZ(z2);
+		setPhi(phi2);
+		setTheta(theta2);
+		setRms(rms2);
+		setExtra(extra2);
+	}
+
+	/**
 	 * @return the name
 	 */
 	public String getName() {
@@ -38,11 +61,11 @@ public class Frame {
 	}
 
 	/**
-	 * @param x
+	 * @param x2
 	 *            the x to set
 	 */
-	public void setX(float x) {
-		values.put(X, x);
+	public void setX(float x2) {
+		values.put(X, x2);
 	}
 
 	/**
@@ -53,11 +76,11 @@ public class Frame {
 	}
 
 	/**
-	 * @param y
+	 * @param y2
 	 *            the y to set
 	 */
-	public void setY(float y) {
-		values.put(Y, y);
+	public void setY(float y2) {
+		values.put(Y, y2);
 	}
 
 	/**
@@ -135,38 +158,16 @@ public class Frame {
 		values.put(EXTRA, extra);
 	}
 
-	/**
-	 * Frame constructor
-	 * 
-	 * @param name
-	 * @param x
-	 * @param y
-	 * @param z
-	 * @param phi
-	 * @param theta
-	 * @param rms
-	 * @param extra
-	 */
-	public Frame(String name, float x, float y, float z, float phi, float theta, float rms, float extra) {
-		setName(name);
-		setX(x);
-		setY(y);
-		setZ(z);
-		setPhi(phi);
-		setTheta(theta);
-		setRms(rms);
-		setExtra(extra);
-	}
-
 	public String toString() {
 		return String.format("%s:\n%7s: %10f\n%7s: %10f\n%7s: %10f\n%7s: %10f\n%7s: %10f\n%7s: %10f\n%7s: %10f\n", getName(), X,
 				getX(), Y, getY(), Z, getZ(), PHI, getPhi(), THETA, getTheta(), RMS, getRms(), EXTRA, getExtra());
 	}
 
 	public boolean equals(Frame other) {
-		boolean namesEqual = this.name.equals(other.name);
-		boolean valuesEqual = this.values.equals(other.values);
-		return namesEqual && valuesEqual;
+		boolean isFrame = other instanceof Frame;
+		boolean nameEquals = this.name.equals(other.name);
+		boolean valuesEquals = this.values.equals(other.values);
+		return isFrame && nameEquals && valuesEquals;
 	}
 
 	// public float[] getDifference(Frame other) {

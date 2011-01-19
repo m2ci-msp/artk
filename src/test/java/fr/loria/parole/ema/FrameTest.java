@@ -24,6 +24,21 @@ public class FrameTest {
 	private float extra = 0;
 
 	/**
+	 * Test method for
+	 * {@link fr.loria.parole.ema.Frame#Frame(java.lang.String, float, float, float, float, float, float, float)}
+	 * .
+	 */
+	@Test
+	public void testFrame() {
+		Frame expected = constructFrame();
+		Frame actual = constructFrame();
+		boolean isEqual = expected.equals(actual);
+		assertTrue(isEqual);
+		// why does this fail then?
+		// assertEquals(expected, actual);
+	}
+
+	/**
 	 * Test method for {@link fr.loria.parole.ema.Frame#getName()}.
 	 */
 	@Test
@@ -198,21 +213,6 @@ public class FrameTest {
 		frame.setExtra(expected);
 		float actual = frame.getExtra();
 		assertEquals(expected, actual, 1e-7);
-	}
-
-	/**
-	 * Test method for
-	 * {@link fr.loria.parole.ema.Frame#Frame(java.lang.String, float, float, float, float, float, float, float)}
-	 * .
-	 */
-	@Test
-	public void testFrame() {
-		Frame expected = constructFrame();
-		Frame actual = constructFrame();
-		boolean equals = expected.equals(actual);
-		assertTrue(equals);
-		// why does this fail then?
-		// assertEquals(expected, actual);
 	}
 
 	/**
