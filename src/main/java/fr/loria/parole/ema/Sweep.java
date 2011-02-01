@@ -7,8 +7,8 @@ import cern.colt.matrix.tfloat.FloatMatrix1D;
 import cern.colt.matrix.tfloat.FloatMatrix2D;
 import cern.colt.matrix.tobject.ObjectMatrix1D;
 
-import fr.loria.parola.ema.io.HeaderFileReader;
-import fr.loria.parola.ema.io.PosFileReader;
+import fr.loria.parole.ema.io.HeaderFileReader;
+import fr.loria.parole.ema.io.PosFileReader;
 
 public class Sweep extends EmaData {
 

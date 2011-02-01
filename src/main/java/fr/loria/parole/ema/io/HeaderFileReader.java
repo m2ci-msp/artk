@@ -1,4 +1,4 @@
-package fr.loria.parola.ema.io;
+package fr.loria.parole.ema.io;
 
 import java.io.File;
 import java.io.IOException;
