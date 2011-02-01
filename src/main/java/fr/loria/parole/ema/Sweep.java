@@ -3,8 +3,6 @@ package fr.loria.parole.ema;
 import java.io.IOException;
 import org.apache.commons.lang.ArrayUtils;
 
-import com.ibm.icu.text.Transliterator;
-
 import cern.colt.matrix.tfloat.FloatMatrix1D;
 import cern.colt.matrix.tfloat.FloatMatrix2D;
 import cern.colt.matrix.tobject.ObjectMatrix1D;
