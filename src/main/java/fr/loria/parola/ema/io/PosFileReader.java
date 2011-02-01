@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
 import java.nio.channels.FileChannel;
 
 import cern.colt.matrix.tfloat.FloatMatrix1D;
@@ -26,19 +27,18 @@ public class PosFileReader {
 		buffer.order(ByteOrder.LITTLE_ENDIAN);
 	}
 
-	public FloatMatrix1D getSamples1D() {
+	public FloatMatrix1D getFlatSamples() {
 		buffer.rewind();
-		int numFloats = buffer.limit() / (Float.SIZE * Byte.SIZE);
+		FloatBuffer floatBuffer = buffer.asFloatBuffer();
+		int numFloats = floatBuffer.capacity();
 		float[] samples = new float[numFloats];
-		for (int i = 0; i < numFloats; i++) {
-			samples[i] = buffer.getFloat();
-		}
+		floatBuffer.get(samples);
 		FloatMatrix1D matrix = new DenseFloatMatrix1D(samples);
 		return matrix;
 	}
 
-	public FloatMatrix2D getSamples2D(int numberOfTracks) {
-		FloatMatrix1D flatData = getSamples1D();
+	public FloatMatrix2D getSamples(int numberOfTracks) {
+		FloatMatrix1D flatData = getFlatSamples();
 		int numberOfSamples = (int) (flatData.size() / numberOfTracks);
 		FloatMatrix2D data = flatData.reshape(numberOfTracks, numberOfSamples);
 		return data;

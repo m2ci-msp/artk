@@ -6,13 +6,16 @@ import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 
+import cern.colt.matrix.tobject.ObjectMatrix1D;
+import cern.colt.matrix.tobject.impl.DenseObjectMatrix1D;
+
 public class HeaderFileReader {
-	private String[] names;
+	private ObjectMatrix1D names;
 
 	/**
 	 * @return the names
 	 */
-	public String[] getNames() {
+	public ObjectMatrix1D getNames() {
 		return names;
 	}
 
@@ -21,8 +24,14 @@ public class HeaderFileReader {
 	}
 
 	public HeaderFileReader(File file) throws IOException {
+		names = loadNames(file);
+	}
+	
+	private ObjectMatrix1D loadNames(File file) throws IOException {
 		String raw = FileUtils.readFileToString(file);
-		names = StringUtils.split(raw);
+		String[] namesArray = StringUtils.split(raw);		
+		ObjectMatrix1D names = new DenseObjectMatrix1D(namesArray);
+		return names;
 	}
 
 }

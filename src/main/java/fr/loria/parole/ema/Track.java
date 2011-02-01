@@ -1,14 +1,15 @@
 package fr.loria.parole.ema;
 
-import java.util.Arrays;
+import cern.colt.matrix.tfloat.FloatMatrix1D;
+import cern.jet.math.tfloat.FloatFunctions;
 
 public class Track {
 	private String name;
-	private float[] samples;
+	private FloatMatrix1D samples;
 
-	public Track(String name, float[] ds) {
+	public Track(String name, FloatMatrix1D floatMatrix1D) {
 		setName(name);
-		setSamples(ds);
+		setSamples(floatMatrix1D);
 	}
 
 	/**
@@ -29,7 +30,7 @@ public class Track {
 	/**
 	 * @return the data
 	 */
-	public float[] getSamples() {
+	public FloatMatrix1D getSamples() {
 		return samples;
 	}
 
@@ -37,26 +38,37 @@ public class Track {
 	 * @param ds
 	 *            the data to set
 	 */
-	private void setSamples(float[] ds) {
-		this.samples = ds;
+	private void setSamples(FloatMatrix1D samples) {
+		this.samples = samples;
+	}
+	
+	public void addToSamples(float offset) {
+		// TODO there has to be a better way to do this somewhere in colt!
+//		float[] samples = getSamples().toArray();
+		samples.assign(FloatFunctions.plus(offset));
+		return;
 	}
 
 	public float getSample(int i) {
-		return samples[i];
+		return samples.get(i);
 	}
 
 	public int getNumberOfSamples() {
-		return samples.length;
+		return (int) samples.size();
 	}
 
 	public String toString() {
-		return name + ": " + Arrays.toString(samples);
+		return name + ": " + samples;
 	}
 
 	public boolean equals(Track other) {
 		boolean isTrack = other instanceof Track;
 		boolean nameEquals = this.name.equals(other.name);
-		boolean samplesEquals = Arrays.equals(this.samples, other.samples);
+		boolean samplesEquals = this.samples.equals(other.samples);
 		return isTrack && nameEquals && samplesEquals;
+	}
+	
+	public Track copy() {
+		return new Track(getName(), getSamples().copy());
 	}
 }

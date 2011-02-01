@@ -1,80 +1,109 @@
 package fr.loria.parole.ema;
 
 import java.io.IOException;
-import java.util.Vector;
+import org.apache.commons.lang.ArrayUtils;
 
+import cern.colt.matrix.tfloat.FloatMatrix1D;
 import cern.colt.matrix.tfloat.FloatMatrix2D;
+import cern.colt.matrix.tobject.ObjectMatrix1D;
 
 import fr.loria.parola.ema.io.HeaderFileReader;
 import fr.loria.parola.ema.io.PosFileReader;
 
-public class Sweep {
-	private Vector<Channel> channels;
+public class Sweep extends EmaData {
 
-	/**
-	 * @return the channels
-	 */
-	public Vector<Channel> getChannels() {
+	public Sweep(String headerFileName, String posFileName) throws IOException {
+		loadFromFiles(headerFileName, posFileName);
+	}
+
+	protected Sweep(ObjectMatrix1D names, FloatMatrix2D data) {
+		this.names = names;
+		this.data = data;
+	};
+
+	private String getName(int index) {
+		return (String) names.get(index);
+	}
+
+	private int[] getNameIndicesStartingWith(String prefix) {
+		int[] selection = null;
+		for (int n = 0; n < names.size(); n++) {
+			String name = (String) names.get(n);
+			if (name.startsWith(prefix)) {
+				selection = ArrayUtils.add(selection, n);
+			}
+		}
+		return selection;
+	}
+
+	public ObjectMatrix1D getNamesStartingWith(String prefix) {
+		int[] indices = getNameIndicesStartingWith(prefix);
+		ObjectMatrix1D selection = names.viewSelection(indices);
+		return selection;
+	}
+
+	public FloatMatrix2D getTracksStartingWith(String prefix) {
+		int[] indices = getNameIndicesStartingWith(prefix);
+		FloatMatrix2D selection = data.viewSelection(indices, null);
+		return selection;
+	}
+
+	public Track getTrack(int index) {
+		Track track = new Track(getName(index), getRow(index));
+		return track;
+	}
+
+	public Frame getFrame(int index) {
+		FloatMatrix1D samples = getColumn(index);
+		Frame frame = new Frame(index, names, samples);
+		return frame;
+	}
+
+	public Channel getChannel(String name) {
+		ObjectMatrix1D names = getNamesStartingWith(name);
+		FloatMatrix2D data = getTracksStartingWith(name);
+		Channel channel = new Channel(names, data);
+		return channel;
+	}
+
+	public Channel[] getChannels() {
+		// TODO hard-coding this is an evil hack!
+		Channel[] channels = new Channel[12];
+		for (int i = 0; i < channels.length; i++) {
+			String channelName = String.format("Ch%d_", i + 1);
+			Channel channel = getChannel(channelName);
+			channels[i] = channel;
+		}
 		return channels;
 	}
 
-	/**
-	 * @param channels
-	 *            the channels to set
-	 */
-	public void setChannels(Vector<Channel> channels) {
-		this.channels = channels;
-	}
-
-	public Channel getChannelByName(String name) {
-		for (Channel ch : channels) {
-			if (ch.getName().equals(name)) {
-				return ch;
-			}
-		}
-		return null;
-	}
-
-	public Sweep() {
-		this.channels = new Vector<Channel>();
-	}
-
-	public void loadFromFiles(String headerFileName, String posFileName) throws IOException {
+	private void loadFromFiles(String headerFileName, String posFileName) throws IOException {
 		HeaderFileReader headerFileReader = new HeaderFileReader(headerFileName);
-		String[] trackNames = headerFileReader.getNames();
-		int numTracks = trackNames.length;
+		names = headerFileReader.getNames();
+
+		int numTracks = (int) names.size();
+
 		PosFileReader posFileReader = new PosFileReader(posFileName);
-		FloatMatrix2D data = posFileReader.getSamples2D(numTracks);
-
-		Track[] tracks = new Track[numTracks];
-		for (int t = 0; t < numTracks; t++) {
-			tracks[t] = new Track(trackNames[t], data.viewRow(t).toArray());
-		}
-
-		int t = 0;
-		for (int c = 0; c < numTracks / 7; c++) { // we should have 7 tracks per
-													// channel
-			Channel ch = new Channel(tracks[t].getName());
-			ch.setX(tracks[t]);
-			ch.setY(tracks[t + 1]);
-			ch.setZ(tracks[t + 2]);
-			ch.setPhi(tracks[t + 3]);
-			ch.setTheta(tracks[t + 4]);
-			ch.setRms(tracks[t + 5]);
-			ch.setExtra(tracks[t + 6]);
-			channels.add(ch);
-			t += 7;
-		}
+		data = posFileReader.getSamples(numTracks);
 
 		return;
 	}
 
+	public void translateData(float xOffset, float yOffset, float zOffset) {
+		Channel[] channels = getChannels();
+		for (Channel channel : channels) {
+			channel.getX().addToSamples(xOffset);
+			channel.getY().addToSamples(yOffset);
+			channel.getZ().addToSamples(zOffset);
+		}
+	}
+
 	@SuppressWarnings("unused")
 	public static void main(String[] args) throws IOException {
-		Sweep s = new Sweep();
-		s.loadFromFiles(args[0], args[1]);
-		Channel foo = s.getChannelByName("Ch1_X");
-//		Frame bar = foo.getFrame(5);
-		int x = 0;
+		Sweep s = new Sweep(args[0], args[1]);
+		Channel channel = s.getChannel("Ch1_");
+		Frame frame = channel.getFrame(0);
+		return;
 	}
+
 }

@@ -10,6 +10,9 @@ import java.util.Arrays;
 import org.junit.Before;
 import org.junit.Test;
 
+import cern.colt.matrix.tfloat.FloatMatrix1D;
+import cern.colt.matrix.tfloat.impl.DenseFloatMatrix1D;
+
 /**
  * @author steiner
  * 
@@ -18,7 +21,7 @@ public class TrackTest {
 
 	private String name;
 	private int numSamples;
-	private float[] samples;
+	private FloatMatrix1D samples;
 
 	/**
 	 * @throws java.lang.Exception
@@ -27,8 +30,7 @@ public class TrackTest {
 	public void setUp() throws Exception {
 		name = "fnord";
 		numSamples = 100;
-		samples = new float[numSamples];
-		Arrays.fill(samples, 1);
+		samples = new DenseFloatMatrix1D(numSamples);
 	}
 
 	/**
@@ -58,9 +60,9 @@ public class TrackTest {
 	 */
 	@Test
 	public void testGetSamples() {
-		float[] expected = samples;
-		float[] actual = constructTrack().getSamples();
-		assertArrayEquals(expected, actual, 1e-7f);
+		FloatMatrix1D expected = samples;
+		FloatMatrix1D actual = constructTrack().getSamples();
+		assertEquals(expected, actual);
 	}
 
 	/**
@@ -70,7 +72,7 @@ public class TrackTest {
 	public void testGetSample() {
 		Track track = constructTrack();
 		for (int i = 0; i < track.getNumberOfSamples(); i++) {
-			float expected = samples[i];
+			float expected = samples.get(i);
 			float actual = track.getSample(i);
 			assertEquals(expected, actual, 1e-7);
 		}

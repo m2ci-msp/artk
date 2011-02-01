@@ -1,25 +1,28 @@
 package fr.loria.parole.ema;
 
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Vector;
 
-public class Channel implements Iterable<Frame> {
-	private String name;
-	private HashMap<String, Track> tracks = new HashMap<String, Track>(Descriptor.NUM_DIMENSIONS_PER_COIL);
-	
-	private Vector<Frame> frames = new Vector<Frame>(200, 200);
+import cern.colt.matrix.tfloat.FloatMatrix2D;
+import cern.colt.matrix.tobject.ObjectMatrix1D;
 
-	public Channel(String name) {
-		assert !name.isEmpty();
-		this.name = name;
+public class Channel extends Sweep {
+
+	public Channel(ObjectMatrix1D names, FloatMatrix2D data) {
+		super(names, data);
 	}
+
+	private String name;
+	private HashMap<String, Track> tracks = new HashMap<String, Track>(EmaData.NUM_DIMENSIONS_PER_COIL);
 
 	/**
 	 * @return the name
 	 */
 	public String getName() {
-		return name;
+		// return name;
+		// TODO: evil hack:
+		String trackName = (String) names.get(0);
+		String[] nameParts = trackName.split("_");
+		return nameParts[0];
 	}
 
 	/**
@@ -34,7 +37,7 @@ public class Channel implements Iterable<Frame> {
 	 * @return the x
 	 */
 	public Track getX() {
-		return tracks.get(Descriptor.X);
+		return tracks.get(EmaData.X);
 	}
 
 	/**
@@ -42,14 +45,14 @@ public class Channel implements Iterable<Frame> {
 	 *            the x to set
 	 */
 	public void setX(Track x) {
-		tracks.put(Descriptor.X, x);
+		tracks.put(EmaData.X, x);
 	}
 
 	/**
 	 * @return the y
 	 */
 	public Track getY() {
-		return tracks.get(Descriptor.Y);
+		return tracks.get(EmaData.Y);
 	}
 
 	/**
@@ -57,14 +60,14 @@ public class Channel implements Iterable<Frame> {
 	 *            the y to set
 	 */
 	public void setY(Track y) {
-		tracks.put(Descriptor.Y, y);
+		tracks.put(EmaData.Y, y);
 	}
 
 	/**
 	 * @return the z
 	 */
 	public Track getZ() {
-		return tracks.get(Descriptor.Z);
+		return tracks.get(EmaData.Z);
 	}
 
 	/**
@@ -72,14 +75,14 @@ public class Channel implements Iterable<Frame> {
 	 *            the z to set
 	 */
 	public void setZ(Track z) {
-		tracks.put(Descriptor.Z, z);
+		tracks.put(EmaData.Z, z);
 	}
 
 	/**
 	 * @return the phi
 	 */
 	public Track getPhi() {
-		return tracks.get(Descriptor.PHI);
+		return tracks.get(EmaData.PHI);
 	}
 
 	/**
@@ -87,14 +90,14 @@ public class Channel implements Iterable<Frame> {
 	 *            the phi to set
 	 */
 	public void setPhi(Track phi) {
-		tracks.put(Descriptor.PHI, phi);
+		tracks.put(EmaData.PHI, phi);
 	}
 
 	/**
 	 * @return the theta
 	 */
 	public Track getTheta() {
-		return tracks.get(Descriptor.THETA);
+		return tracks.get(EmaData.THETA);
 	}
 
 	/**
@@ -102,14 +105,14 @@ public class Channel implements Iterable<Frame> {
 	 *            the theta to set
 	 */
 	public void setTheta(Track theta) {
-		tracks.put(Descriptor.THETA, theta);
+		tracks.put(EmaData.THETA, theta);
 	}
 
 	/**
 	 * @return the rms
 	 */
 	public Track getRms() {
-		return tracks.get(Descriptor.RMS);
+		return tracks.get(EmaData.RMS);
 	}
 
 	/**
@@ -117,14 +120,14 @@ public class Channel implements Iterable<Frame> {
 	 *            the rms to set
 	 */
 	public void setRms(Track rms) {
-		tracks.put(Descriptor.RMS, rms);
+		tracks.put(EmaData.RMS, rms);
 	}
 
 	/**
 	 * @return the extra
 	 */
 	public Track getExtra() {
-		return tracks.get(Descriptor.EXTRA);
+		return tracks.get(EmaData.EXTRA);
 	}
 
 	/**
@@ -132,7 +135,7 @@ public class Channel implements Iterable<Frame> {
 	 *            the extra to set
 	 */
 	public void setExtra(Track extra) {
-		tracks.put(Descriptor.EXTRA, extra);
+		tracks.put(EmaData.EXTRA, extra);
 	}
 
 	// public Frame getFrame(int i) {
@@ -145,19 +148,5 @@ public class Channel implements Iterable<Frame> {
 	// Track extra = this.extra.getSample(i);
 	// return new Frame(name, x, y, z, phi, theta, rms, extra);
 	// }
-
-	public String toString() {
-		return String.format("%s\n  %s\n  %s\n  %s\n  %s\n  %s\n  %s\n  %s", getName(), getX(), getY(), getZ(), getPhi(),
-				getTheta(), getRms(), getExtra());
-	}
-
-	public Iterator<Frame> iterator() {
-		Iterator<Frame> frameIterator = frames.iterator();
-		return frameIterator;
-	}
-	
-	private void updateFrames() {
-		
-	}
 
 }
