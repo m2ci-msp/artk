@@ -9,28 +9,27 @@ public class Channel extends Sweep {
 
 	public Channel(ObjectMatrix1D names, FloatMatrix2D data) {
 		super(names, data);
+		// TODO robust checking
+		setX(getTrack(0));
+		setY(getTrack(1));
+		setZ(getTrack(2));
+		setPhi(getTrack(3));
+		setTheta(getTrack(4));
+		setRms(getTrack(5));
+		setExtra(getTrack(6));
+		return;
 	}
 
-	private String name;
 	private HashMap<String, Track> tracks = new HashMap<String, Track>(EmaData.NUM_DIMENSIONS_PER_COIL);
 
 	/**
 	 * @return the name
 	 */
 	public String getName() {
-		// return name;
 		// TODO: evil hack:
 		String trackName = (String) names.get(0);
 		String[] nameParts = trackName.split("_");
 		return nameParts[0];
-	}
-
-	/**
-	 * @param name
-	 *            the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	/**
@@ -149,4 +148,10 @@ public class Channel extends Sweep {
 	// return new Frame(name, x, y, z, phi, theta, rms, extra);
 	// }
 
+	@Override
+	public String toString() {
+		String string = String.format("Name: %s\nData: %s", getName(), data);
+		return string;
+	}
+	
 }

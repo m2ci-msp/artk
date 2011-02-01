@@ -3,6 +3,8 @@ package fr.loria.parole.ema;
 import java.io.IOException;
 import org.apache.commons.lang.ArrayUtils;
 
+import com.ibm.icu.text.Transliterator;
+
 import cern.colt.matrix.tfloat.FloatMatrix1D;
 import cern.colt.matrix.tfloat.FloatMatrix2D;
 import cern.colt.matrix.tobject.ObjectMatrix1D;
@@ -26,6 +28,7 @@ public class Sweep extends EmaData {
 	}
 
 	private int[] getNameIndicesStartingWith(String prefix) {
+		// TODO this does not guarantee the implicit assumption that the names will be in the order x, z, y, ...!
 		int[] selection = null;
 		for (int n = 0; n < names.size(); n++) {
 			String name = (String) names.get(n);
@@ -101,8 +104,11 @@ public class Sweep extends EmaData {
 	@SuppressWarnings("unused")
 	public static void main(String[] args) throws IOException {
 		Sweep s = new Sweep(args[0], args[1]);
-		Channel channel = s.getChannel("Ch1_");
-		Frame frame = channel.getFrame(0);
+		Channel channel = s.getChannel("Ch11_");
+		Track xtrack = channel.getX();
+		Track ytrack = channel.getY();
+		s.translateData(10, 0, 0);
+		s.translateData(0, 10, 0);
 		return;
 	}
 

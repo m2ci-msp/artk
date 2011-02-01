@@ -5,8 +5,6 @@ package fr.loria.parole.ema;
 
 import static org.junit.Assert.*;
 
-import java.util.Arrays;
-
 import org.junit.Before;
 import org.junit.Test;
 
