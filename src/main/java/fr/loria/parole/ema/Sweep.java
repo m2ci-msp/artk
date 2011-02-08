@@ -26,7 +26,8 @@ public class Sweep extends EmaData {
 	}
 
 	private int[] getNameIndicesStartingWith(String prefix) {
-		// TODO this does not guarantee the implicit assumption that the names will be in the order x, z, y, ...!
+		// TODO this does not guarantee the implicit assumption that the names
+		// will be in the order x, z, y, ...!
 		int[] selection = null;
 		for (int n = 0; n < names.size(); n++) {
 			String name = (String) names.get(n);

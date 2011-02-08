@@ -34,4 +34,12 @@ public class Frame extends EmaData {
 		return samples.get(2);
 	}
 
+	public float getPhi() {
+		return samples.get(3);
+	}
+
+	public float getTheta() {
+		return samples.get(4);
+	}
+
 }
