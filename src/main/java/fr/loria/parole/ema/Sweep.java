@@ -68,6 +68,16 @@ public class Sweep extends EmaData {
 		return channel;
 	}
 
+	public Track[] getTracks() {
+		int numTracks = getNumberOfTracks();
+		Track[] tracks = new Track[numTracks];
+		for (int i = 0; i < numTracks; i++) {
+			Track track = getTrack(i);
+			tracks[i] = track;
+		}
+		return tracks;
+	}
+	             
 	public Channel[] getChannels() {
 		// TODO hard-coding this is an evil hack!
 		Channel[] channels = new Channel[12];
@@ -99,15 +109,19 @@ public class Sweep extends EmaData {
 			channel.getZ().addToSamples(zOffset);
 		}
 	}
+	
+	public void smoothData(int windowSize) {
+		for (Track track : getTracks()) {
+			track.smoothSamples(windowSize);
+		}
+		return;
+	}
 
 	@SuppressWarnings("unused")
 	public static void main(String[] args) throws IOException {
 		Sweep s = new Sweep(args[0], args[1]);
-		Channel channel = s.getChannel("Ch11_");
-		Track xtrack = channel.getX();
-		Track ytrack = channel.getY();
-		s.translateData(10, 0, 0);
-		s.translateData(0, 10, 0);
+		Channel channel = s.getChannel("Ch1_");
+		Track phi = channel.getPhi();
 		return;
 	}
 

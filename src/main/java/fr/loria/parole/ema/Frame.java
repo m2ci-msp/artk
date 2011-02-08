@@ -34,12 +34,42 @@ public class Frame extends EmaData {
 		return samples.get(2);
 	}
 
+	/**
+	 * Get the horizontal angle (yaw) in degrees
+	 * 
+	 * @return
+	 */
 	public float getPhi() {
 		return samples.get(3);
 	}
 
+	/**
+	 * Get the horizontal angle (yaw) in radians
+	 * 
+	 * @return
+	 */
+	public float getPhiRadians() {
+		float rads = (float) Math.toRadians(getPhi());
+		return rads;
+	}
+
+	/**
+	 * Get the vertical angle (pitch) in degrees
+	 * 
+	 * @return
+	 */
 	public float getTheta() {
 		return samples.get(4);
+	}
+
+	/**
+	 * Get the vertical angle (pitch) in radians
+	 * 
+	 * @return
+	 */
+	public float getThetaRadians() {
+		float rads = (float) Math.toRadians(getTheta());
+		return rads;
 	}
 
 }

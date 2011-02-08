@@ -33,6 +33,10 @@ public class EmaData {
 	public int getNumberOfFrames() {
 		return data.columns();
 	}
+	
+	public int getNumberOfTracks() {
+		return data.rows();
+	}
 
 	public String toString() {
 		String string = String.format("Names: %s\nData: %s", names, data);

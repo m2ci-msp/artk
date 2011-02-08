@@ -1,7 +1,10 @@
 package fr.loria.parole.ema;
 
+import cern.colt.list.tfloat.FloatArrayList;
+import cern.colt.matrix.tfloat.FloatFactory1D;
 import cern.colt.matrix.tfloat.FloatMatrix1D;
 import cern.jet.math.tfloat.FloatFunctions;
+import cern.jet.stat.tfloat.FloatDescriptive;
 
 public class Track {
 	private String name;
@@ -41,11 +44,30 @@ public class Track {
 	private void setSamples(FloatMatrix1D samples) {
 		this.samples = samples;
 	}
-	
+
 	public void addToSamples(float offset) {
-		// TODO there has to be a better way to do this somewhere in colt!
-//		float[] samples = getSamples().toArray();
 		samples.assign(FloatFunctions.plus(offset));
+		return;
+	}
+
+	/**
+	 * Perform in-place smoothing of the samples by a moving average of
+	 * windowSize samples.
+	 * 
+	 * @param windowSize
+	 */
+	public void smoothSamples(int windowSize) {
+		FloatMatrix1D smoothedSamples = samples.copy();
+		int firstSample = windowSize / 2;
+		int lastSample = (int) (smoothedSamples.size() - windowSize / 2);
+		for (int i = firstSample; i < lastSample; i++) {
+			int j = i - windowSize / 2;
+			FloatMatrix1D range = samples.viewPart(j, windowSize);
+			FloatArrayList values = FloatFactory1D.dense.toList(range);
+			float value = FloatDescriptive.mean(values);
+			smoothedSamples.set(i, value);
+		}
+		samples.assign(smoothedSamples);
 		return;
 	}
 
@@ -67,7 +89,7 @@ public class Track {
 		boolean samplesEquals = this.samples.equals(other.samples);
 		return isTrack && nameEquals && samplesEquals;
 	}
-	
+
 	public Track copy() {
 		return new Track(getName(), getSamples().copy());
 	}
