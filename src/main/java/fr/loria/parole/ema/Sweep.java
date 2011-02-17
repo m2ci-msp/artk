@@ -38,8 +38,27 @@ public class Sweep extends EmaData {
 		return selection;
 	}
 
+	private int[] getNameIndicesEndingWith(String prefix) {
+		// TODO this does not guarantee the implicit assumption that the names
+		// will be in the order x, z, y, ...!
+		int[] selection = null;
+		for (int n = 0; n < names.size(); n++) {
+			String name = (String) names.get(n);
+			if (name.endsWith(prefix)) {
+				selection = ArrayUtils.add(selection, n);
+			}
+		}
+		return selection;
+	}
+
 	public ObjectMatrix1D getNamesStartingWith(String prefix) {
 		int[] indices = getNameIndicesStartingWith(prefix);
+		ObjectMatrix1D selection = names.viewSelection(indices);
+		return selection;
+	}
+
+	public ObjectMatrix1D getNamesEndingWith(String prefix) {
+		int[] indices = getNameIndicesEndingWith(prefix);
 		ObjectMatrix1D selection = names.viewSelection(indices);
 		return selection;
 	}
@@ -77,12 +96,13 @@ public class Sweep extends EmaData {
 		}
 		return tracks;
 	}
-	             
+
 	public Channel[] getChannels() {
-		// TODO hard-coding this is an evil hack!
-		Channel[] channels = new Channel[12];
+		ObjectMatrix1D xNames = getNamesEndingWith(X);
+		Channel[] channels = new Channel[(int) xNames.size()];
 		for (int i = 0; i < channels.length; i++) {
-			String channelName = String.format("Ch%d_", i + 1);
+			// TODO ugly hack
+			String channelName = ((String) xNames.get(i)).replace("_X", "");
 			Channel channel = getChannel(channelName);
 			channels[i] = channel;
 		}
@@ -109,7 +129,7 @@ public class Sweep extends EmaData {
 			channel.getZ().addToSamples(zOffset);
 		}
 	}
-	
+
 	public void smoothData(int windowSize) {
 		for (Track track : getTracks()) {
 			track.smoothSamples(windowSize);
@@ -120,8 +140,7 @@ public class Sweep extends EmaData {
 	@SuppressWarnings("unused")
 	public static void main(String[] args) throws IOException {
 		Sweep s = new Sweep(args[0], args[1]);
-		Channel channel = s.getChannel("Ch1_");
-		Track phi = channel.getPhi();
+		Channel[] channels = s.getChannels();
 		return;
 	}
 
