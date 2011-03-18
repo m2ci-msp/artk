@@ -50,6 +50,15 @@ public class Track {
 		return;
 	}
 
+	public void addToSamples(FloatMatrix1D other) {
+		samples.assign(other, FloatFunctions.plus);
+		return;
+	}
+
+	public void multiplySamples(float factor) {
+		samples.assign(FloatFunctions.mult(factor));
+	}
+
 	/**
 	 * Perform in-place smoothing of the samples by a moving average of
 	 * windowSize samples.

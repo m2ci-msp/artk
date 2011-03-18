@@ -5,7 +5,6 @@ import cern.colt.matrix.tobject.ObjectMatrix1D;
 
 public class Frame extends EmaData {
 	private FloatMatrix1D samples;
-	private int index;
 
 	public Frame(ObjectMatrix1D names, FloatMatrix1D samples) {
 		this.names = names;
@@ -14,7 +13,6 @@ public class Frame extends EmaData {
 
 	public Frame(int frameIndex, ObjectMatrix1D names, FloatMatrix1D samples) {
 		this(names, samples);
-		this.index = frameIndex;
 	}
 
 	public String toString() {
@@ -26,8 +24,16 @@ public class Frame extends EmaData {
 		return samples.get(0);
 	}
 
+	public void setX(float x) {
+		samples.set(0, x);
+	}
+
 	public float getY() {
 		return samples.get(1);
+	}
+
+	public void setY(float y) {
+		samples.set(1, y);
 	}
 
 	public float getZ() {
@@ -41,6 +47,10 @@ public class Frame extends EmaData {
 	 */
 	public float getPhi() {
 		return samples.get(3);
+	}
+
+	public void setPhi(float phi) {
+		samples.set(3, phi);
 	}
 
 	/**
@@ -60,6 +70,10 @@ public class Frame extends EmaData {
 	 */
 	public float getTheta() {
 		return samples.get(4);
+	}
+	
+	public void setTheta(float theta) {
+		samples.set(4, theta);
 	}
 
 	/**

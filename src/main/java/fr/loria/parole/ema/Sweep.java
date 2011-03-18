@@ -2,10 +2,14 @@ package fr.loria.parole.ema;
 
 import java.io.IOException;
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.time.FastDateFormat;
 
+import cern.colt.function.tfloat.FloatFunction;
 import cern.colt.matrix.tfloat.FloatMatrix1D;
 import cern.colt.matrix.tfloat.FloatMatrix2D;
+import cern.colt.matrix.tfloat.impl.DenseFloatMatrix2D;
 import cern.colt.matrix.tobject.ObjectMatrix1D;
+import cern.jet.math.tfloat.FloatFunctions;
 
 import fr.loria.parole.ema.io.HeaderFileReader;
 import fr.loria.parole.ema.io.PosFileReader;
@@ -76,7 +80,7 @@ public class Sweep extends EmaData {
 
 	public Frame getFrame(int index) {
 		FloatMatrix1D samples = getColumn(index);
-		Frame frame = new Frame(index, names, samples);
+		Frame frame = new Frame(names, samples);
 		return frame;
 	}
 
@@ -97,6 +101,11 @@ public class Sweep extends EmaData {
 		return tracks;
 	}
 
+	/**
+	 * Warning, this is read-only!
+	 * 
+	 * @return
+	 */
 	public Channel[] getChannels() {
 		ObjectMatrix1D xNames = getNamesEndingWith(X);
 		Channel[] channels = new Channel[(int) xNames.size()];
@@ -130,6 +139,30 @@ public class Sweep extends EmaData {
 		}
 	}
 
+	/**
+	 * 
+	 * @param angleRadians
+	 *            angle in radians
+	 */
+	public void rotateDataRadians(float angleRadians) {
+		float sinTheta = (float) Math.sin(angleRadians);
+		float cosTheta = (float) Math.cos(angleRadians);
+
+		Channel[] channels = getChannels();
+		for (Channel channel : channels) {
+			for (int f = 0; f < channel.getNumberOfFrames(); f++) {
+				Frame frame = channel.getFrame(f);
+				float xPrime = frame.getX() * cosTheta - frame.getY() * sinTheta;
+				float yPrime = frame.getX() * sinTheta + frame.getY() * cosTheta;
+				frame.setX(xPrime);
+				frame.setY(yPrime);
+
+				frame.setPhi((float) Math.toDegrees(angleRadians));
+			}
+		}
+		return;
+	}
+
 	public void smoothData(int windowSize) {
 		for (Track track : getTracks()) {
 			track.smoothSamples(windowSize);
@@ -140,7 +173,6 @@ public class Sweep extends EmaData {
 	@SuppressWarnings("unused")
 	public static void main(String[] args) throws IOException {
 		Sweep s = new Sweep(args[0], args[1]);
-		Channel[] channels = s.getChannels();
 		return;
 	}
 

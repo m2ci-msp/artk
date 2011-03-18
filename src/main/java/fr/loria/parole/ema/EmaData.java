@@ -25,6 +25,10 @@ public class EmaData {
 	protected FloatMatrix1D getRow(int index) {
 		return data.viewRow(index);
 	}
+	
+	protected FloatMatrix2D getRows(int[] indices) {
+		return data.viewSelection(indices, null);
+	}
 
 	protected FloatMatrix1D getColumn(int index) {
 		return data.viewColumn(index);
