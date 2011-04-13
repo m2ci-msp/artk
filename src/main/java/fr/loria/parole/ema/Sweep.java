@@ -1,6 +1,9 @@
 package fr.loria.parole.ema;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.time.FastDateFormat;
 
@@ -18,6 +21,10 @@ public class Sweep extends EmaData {
 
 	public Sweep(String headerFileName, String posFileName) throws IOException {
 		loadFromFiles(headerFileName, posFileName);
+	}
+
+	public Sweep(URL headerFileUrl, URL posFileUrl) throws IOException, URISyntaxException {
+		loadFromFiles(headerFileUrl, posFileUrl);
 	}
 
 	protected Sweep(ObjectMatrix1D names, FloatMatrix2D data) {
@@ -116,6 +123,12 @@ public class Sweep extends EmaData {
 			channels[i] = channel;
 		}
 		return channels;
+	}
+
+	private void loadFromFiles(URL headerFileUrl, URL posFileUrl) throws IOException, URISyntaxException {
+		String headerFilePath = headerFileUrl.toURI().getPath();
+		String posFilePath = posFileUrl.toURI().getPath();
+		loadFromFiles(headerFilePath, posFilePath);
 	}
 
 	private void loadFromFiles(String headerFileName, String posFileName) throws IOException {
