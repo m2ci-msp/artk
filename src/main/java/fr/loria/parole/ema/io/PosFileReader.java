@@ -1,6 +1,7 @@
 package fr.loria.parole.ema.io;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.FloatBuffer;
 import cern.colt.matrix.tfloat.FloatMatrix1D;
 import cern.colt.matrix.tfloat.FloatMatrix2D;
@@ -10,6 +11,10 @@ public class PosFileReader extends DataFileReader {
 
 	public PosFileReader(String dataFileName) throws IOException {
 		super(dataFileName);
+	}
+
+	public PosFileReader(InputStream dataStream) throws IOException {
+		super(dataStream);
 	}
 
 	public FloatMatrix1D getFlatSamples() {
@@ -28,5 +33,5 @@ public class PosFileReader extends DataFileReader {
 		FloatMatrix2D data = flatData.reshape(numberOfTracks, numberOfSamples);
 		return data;
 	}
-	
+
 }

@@ -2,8 +2,10 @@ package fr.loria.parole.ema.io;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
 import cern.colt.matrix.tobject.ObjectMatrix1D;
@@ -26,10 +28,23 @@ public class HeaderFileReader {
 	public HeaderFileReader(File file) throws IOException {
 		names = loadNames(file);
 	}
-	
+
+	public HeaderFileReader(InputStream stream) throws IOException {
+		names = loadNames(stream);
+	}
+
+	private ObjectMatrix1D loadNames(InputStream stream) throws IOException {
+		String raw = IOUtils.toString(stream);
+		return loadNames(raw);
+	}
+
 	private ObjectMatrix1D loadNames(File file) throws IOException {
 		String raw = FileUtils.readFileToString(file);
-		String[] namesArray = StringUtils.split(raw);		
+		return loadNames(raw);
+	}
+
+	private ObjectMatrix1D loadNames(String string) throws IOException {
+		String[] namesArray = StringUtils.split(string);
 		ObjectMatrix1D names = new DenseObjectMatrix1D(namesArray);
 		return names;
 	}

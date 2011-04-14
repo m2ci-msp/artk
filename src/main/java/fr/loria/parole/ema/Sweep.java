@@ -1,19 +1,16 @@
 package fr.loria.parole.ema;
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.time.FastDateFormat;
-
-import cern.colt.function.tfloat.FloatFunction;
 import cern.colt.matrix.tfloat.FloatMatrix1D;
 import cern.colt.matrix.tfloat.FloatMatrix2D;
-import cern.colt.matrix.tfloat.impl.DenseFloatMatrix2D;
 import cern.colt.matrix.tobject.ObjectMatrix1D;
-import cern.jet.math.tfloat.FloatFunctions;
-
 import fr.loria.parole.ema.io.HeaderFileReader;
 import fr.loria.parole.ema.io.PosFileReader;
 
@@ -25,6 +22,10 @@ public class Sweep extends EmaData {
 
 	public Sweep(URL headerFileUrl, URL posFileUrl) throws IOException, URISyntaxException {
 		loadFromFiles(headerFileUrl, posFileUrl);
+	}
+
+	public Sweep(InputStream headerFileStream, InputStream posFileStream) throws IOException {
+		loadFromStreams(headerFileStream, posFileStream);
 	}
 
 	protected Sweep(ObjectMatrix1D names, FloatMatrix2D data) {
@@ -133,14 +134,20 @@ public class Sweep extends EmaData {
 
 	private void loadFromFiles(String headerFileName, String posFileName) throws IOException {
 		HeaderFileReader headerFileReader = new HeaderFileReader(headerFileName);
-		names = headerFileReader.getNames();
-
-		int numTracks = (int) names.size();
-
 		PosFileReader posFileReader = new PosFileReader(posFileName);
-		data = posFileReader.getSamples(numTracks);
+		loadFromReaders(headerFileReader, posFileReader);
+	}
 
-		return;
+	private void loadFromStreams(InputStream headerFileStream, InputStream posFileStream) throws IOException {
+		HeaderFileReader headerFileReader = new HeaderFileReader(headerFileStream);
+		PosFileReader posFileReader = new PosFileReader(posFileStream);
+		loadFromReaders(headerFileReader, posFileReader);
+	}
+
+	private void loadFromReaders(HeaderFileReader headerFileReader, PosFileReader posFileReader) {
+		names = headerFileReader.getNames();
+		int numTracks = (int) names.size();
+		data = posFileReader.getSamples(numTracks);
 	}
 
 	public void translateData(float xOffset, float yOffset, float zOffset) {
@@ -185,7 +192,9 @@ public class Sweep extends EmaData {
 
 	@SuppressWarnings("unused")
 	public static void main(String[] args) throws IOException {
-		Sweep s = new Sweep(args[0], args[1]);
+		InputStream args0 = new BufferedInputStream(new FileInputStream(args[0]));
+		InputStream args1 = new BufferedInputStream(new FileInputStream(args[1]));
+		Sweep s = new Sweep(args0, args1);
 		return;
 	}
 
