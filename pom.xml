@@ -36,7 +36,7 @@
 			<version>2.5</version>
 		</dependency>
 		<dependency>
-			<groupId>icu4j</groupId>
+			<groupId>com.ibm.icu</groupId>
 			<artifactId>icu4j</artifactId>
 			<version>2.6.1</version>
 		</dependency>
@@ -51,6 +51,7 @@
 			<version>2.0.8</version>
 		</dependency>
 	</dependencies>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
