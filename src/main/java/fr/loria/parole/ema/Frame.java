@@ -1,6 +1,7 @@
 package fr.loria.parole.ema;
 
 import cern.colt.matrix.tfloat.FloatMatrix1D;
+import cern.colt.matrix.tfloat.impl.DenseFloatMatrix1D;
 import cern.colt.matrix.tobject.ObjectMatrix1D;
 
 public class Frame extends EmaData {
@@ -71,7 +72,7 @@ public class Frame extends EmaData {
 	public float getTheta() {
 		return samples.get(4);
 	}
-	
+
 	public void setTheta(float theta) {
 		samples.set(4, theta);
 	}
@@ -84,6 +85,22 @@ public class Frame extends EmaData {
 	public float getThetaRadians() {
 		float rads = (float) Math.toRadians(getTheta());
 		return rads;
+	}
+
+	public Frame difference(Frame other) {
+		assert this.names.equals(other.names);
+
+		float x = other.getX() - this.getX();
+		float y = other.getY() - this.getY();
+		float z = other.getZ() - this.getZ();
+		float phi = other.getPhi() - this.getPhi();
+		float theta = other.getTheta() - this.getTheta();
+
+		float[] values = new float[] { x, y, z, phi, theta };
+		DenseFloatMatrix1D matrix = new DenseFloatMatrix1D(values);
+
+		Frame frame = new Frame(names, matrix);
+		return frame;
 	}
 
 }
