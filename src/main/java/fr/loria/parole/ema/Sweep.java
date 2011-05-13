@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 import org.apache.commons.lang.ArrayUtils;
 import cern.colt.matrix.tfloat.FloatMatrix1D;
@@ -124,6 +127,19 @@ public class Sweep extends EmaData {
 			channels[i] = channel;
 		}
 		return channels;
+	}
+
+	public Frame[] getFrames() {
+		Frame[] frames = new Frame[this.getNumberOfFrames()];
+		for (int i = 0; i < frames.length; i++) {
+			frames[i] = this.getFrame(i);
+		}
+		return frames;
+	}
+
+	public Iterator<Frame> getFrameIterator() {
+		List<Frame> frameList = Arrays.asList(this.getFrames());
+		return frameList.iterator();
 	}
 
 	private void loadFromFiles(URL headerFileUrl, URL posFileUrl) throws IOException, URISyntaxException {
