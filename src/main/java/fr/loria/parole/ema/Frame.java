@@ -87,6 +87,16 @@ public class Frame extends EmaData {
 		return rads;
 	}
 
+	/**
+	 * Get the RMS error
+	 * 
+	 * @return
+	 */
+	public float getRMS() {
+		float rms = samples.get(5);
+		return rms;
+	}
+
 	public Frame difference(Frame other) {
 		assert this.names.equals(other.names);
 
