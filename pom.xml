@@ -17,4 +17,12 @@
 
 	<inceptionYear>2014</inceptionYear>
 
+	<dependencies>
+		<dependency>
+			<groupId>com.googlecode.efficient-java-matrix-library</groupId>
+			<artifactId>ejml</artifactId>
+			<version>0.23</version>
+		</dependency>
+	</dependencies>
+
 </project>
