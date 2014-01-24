@@ -1,21 +1,23 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>fr.loria.parole</groupId>
-	<artifactId>ema</artifactId>
 	<packaging>jar</packaging>
-	<version>0.1-SNAPSHOT</version>
-	<name>ema</name>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
-			</plugin>
-		</plugins>
-	</build>
+	<groupId>org.m2ci.speech</groupId>
+	<artifactId>artk</artifactId>
+	<version>0.1-SNAPSHOT</version>
+
+	<name>ArTK</name>
+	<description>Articulatory data ToolKit</description>
+	<organization>
+		<name>MMCI</name>
+		<url>http://m2ci.org/</url>
+	</organization>
+	<inceptionYear>2011</inceptionYear>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 
 	<dependencies>
 		<dependency>
@@ -51,17 +53,5 @@
 			<version>2.0.8</version>
 		</dependency>
 	</dependencies>
-
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
-
-	<distributionManagement>
-		<snapshotRepository>
-			<id>baum.loria.fr</id>
-			<name>baum.loria.fr-snapshots</name>
-			<url>http://baum:8081/artifactory/libs-snapshot-local</url>
-		</snapshotRepository>
-	</distributionManagement>
 
 </project>
