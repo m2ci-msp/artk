@@ -1,4 +1,4 @@
-package fr.loria.parole.ema;
+package org.m2ci.speech;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
@@ -11,11 +11,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.m2ci.speech.io.HeaderFileReader;
+import org.m2ci.speech.io.PosFileReader;
+
 import cern.colt.matrix.tfloat.FloatMatrix1D;
 import cern.colt.matrix.tfloat.FloatMatrix2D;
 import cern.colt.matrix.tobject.ObjectMatrix1D;
-import fr.loria.parole.ema.io.HeaderFileReader;
-import fr.loria.parole.ema.io.PosFileReader;
 
 public class Sweep extends EmaData {
 

@@ -1,12 +1,13 @@
 /**
  * 
  */
-package fr.loria.parole.ema;
+package org.m2ci.speech;
 
 import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.m2ci.speech.Track;
 
 import cern.colt.matrix.tfloat.FloatMatrix1D;
 import cern.colt.matrix.tfloat.impl.DenseFloatMatrix1D;
@@ -33,7 +34,7 @@ public class TrackTest {
 
 	/**
 	 * Test method for
-	 * {@link fr.loria.parole.ema.Track#Track(java.lang.String, float[])}.
+	 * {@link org.m2ci.speech.Track#Track(java.lang.String, float[])}.
 	 */
 	@Test
 	public void testTrack() {
@@ -44,7 +45,7 @@ public class TrackTest {
 	}
 
 	/**
-	 * Test method for {@link fr.loria.parole.ema.Track#getName()}.
+	 * Test method for {@link org.m2ci.speech.Track#getName()}.
 	 */
 	@Test
 	public void testGetName() {
@@ -54,7 +55,7 @@ public class TrackTest {
 	}
 
 	/**
-	 * Test method for {@link fr.loria.parole.ema.Track#getSamples()}.
+	 * Test method for {@link org.m2ci.speech.Track#getSamples()}.
 	 */
 	@Test
 	public void testGetSamples() {
@@ -64,7 +65,7 @@ public class TrackTest {
 	}
 
 	/**
-	 * Test method for {@link fr.loria.parole.ema.Track#getSample(int)}.
+	 * Test method for {@link org.m2ci.speech.Track#getSample(int)}.
 	 */
 	@Test
 	public void testGetSample() {
@@ -77,7 +78,7 @@ public class TrackTest {
 	}
 
 	/**
-	 * Test method for {@link fr.loria.parole.ema.Track#getNumberOfSamples()}.
+	 * Test method for {@link org.m2ci.speech.Track#getNumberOfSamples()}.
 	 */
 	@Test
 	public void testGetNumberOfSamples() {
@@ -87,7 +88,7 @@ public class TrackTest {
 	}
 
 	/**
-	 * Test method for {@link fr.loria.parole.ema.Track#toString()}.
+	 * Test method for {@link org.m2ci.speech.Track#toString()}.
 	 */
 	@Test
 	public void testToString() {

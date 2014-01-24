@@ -1,4 +1,4 @@
-package fr.loria.parole.ema;
+package org.m2ci.speech;
 
 import java.util.HashMap;
 

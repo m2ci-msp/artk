@@ -1,4 +1,4 @@
-package fr.loria.parole.ema.io;
+package org.m2ci.speech.io;
 
 import java.io.IOException;
 import java.io.InputStream;

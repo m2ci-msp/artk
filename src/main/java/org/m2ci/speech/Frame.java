@@ -1,4 +1,4 @@
-package fr.loria.parole.ema;
+package org.m2ci.speech;
 
 import cern.colt.matrix.tfloat.FloatMatrix1D;
 import cern.colt.matrix.tfloat.impl.DenseFloatMatrix1D;
