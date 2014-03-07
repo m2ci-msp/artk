@@ -3,9 +3,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<packaging>jar</packaging>
 
-	<groupId>org.m2ci.speech</groupId>
+	<groupId>org.m2ci.msp</groupId>
 	<artifactId>artk</artifactId>
-	<version>0.1-SNAPSHOT</version>
+	<version>0.2-SNAPSHOT</version>
 
 	<name>ArTK</name>
 	<description>Articulatory data ToolKit</description>
@@ -15,6 +15,13 @@
 	</organization>
 	<inceptionYear>2011</inceptionYear>
 
+	<developers>
+		<developer>
+			<id>psibre</id>
+			<name>Ingmar Steiner</name>
+		</developer>
+	</developers>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -23,39 +30,57 @@
 		<dependency>
 			<groupId>com.googlecode.efficient-java-matrix-library</groupId>
 			<artifactId>ejml</artifactId>
-			<version>0.23</version>
+			<version>0.24</version>
 		</dependency>
+
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>16.0.1</version>
+		</dependency>
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.8.2</version>
+			<version>4.11</version>
 			<scope>test</scope>
 		</dependency>
+
 		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>2.0</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
-			<version>2.6</version>
-		</dependency>
-		<dependency>
-			<groupId>com.ibm.icu</groupId>
-			<artifactId>icu4j</artifactId>
-			<version>2.6.1</version>
-		</dependency>
-		<dependency>
-			<groupId>net.sourceforge.parallelcolt</groupId>
-			<artifactId>parallelcolt</artifactId>
-			<version>0.10.1</version>
-		</dependency>
-		<dependency>
-			<groupId>oro</groupId>
-			<artifactId>oro</artifactId>
-			<version>2.0.8</version>
+			<groupId>org.easytesting</groupId>
+			<artifactId>fest-assert-core</artifactId>
+			<version>2.0M10</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<artifactId>maven-clean-plugin</artifactId>
+					<version>2.5</version>
+				</plugin>
+
+				<plugin>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>2.6</version>
+				</plugin>
+
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.1</version>
+					<configuration>
+						<source>1.6</source>
+						<target>1.6</target>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.16</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
 </project>
