@@ -3,17 +3,24 @@ package org.m2ci.msp.ema;
 import static org.fest.assertions.api.Assertions.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
+
 import org.m2ci.msp.ema.AG500PosFile;
 
 import com.google.common.io.Resources;
 
 public class AG500PosFileTest {
+
+	@Rule
+	public TemporaryFolder tempFolder = new TemporaryFolder();
 
 	private static File file;
 
@@ -46,5 +53,14 @@ public class AG500PosFileTest {
 		assertThat(firstValue).isEqualTo(1);
 		double lastValue = posFile.data.get(9, 83);
 		assertThat(lastValue).isEqualTo(840);
+	}
+
+	@Test
+	public void testSaveTxt() throws IOException, URISyntaxException {
+		File tmpFile = tempFolder.newFile();
+		posFile.saveTxt(tmpFile);
+		URI resource = Resources.getResource("ag500.txt").toURI();
+		File txtFile = new File(resource);
+		assertThat(tmpFile).hasContentEqualTo(txtFile);
 	}
 }

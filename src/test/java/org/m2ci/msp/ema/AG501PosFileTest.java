@@ -10,11 +10,12 @@ import java.net.URISyntaxException;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
 import org.m2ci.msp.ema.AG501PosFile;
 
 import com.google.common.io.Resources;
 
-public class AG501PosFileTest {
+public class AG501PosFileTest extends AG500PosFileTest {
 
 	private AG501PosFile posFile;
 
@@ -37,9 +38,23 @@ public class AG501PosFileTest {
 	}
 
 	@Test
+	public void testNumberOfFields() {
+		assertThat(posFile.getNumberOfFieldsPerFrame()).isEqualTo(7 * posFile.header.getNumChannels());
+	}
+
+	@Test
 	public void testData() {
 		int numFields = posFile.getNumberOfFieldsPerFrame();
 		int dataCols = posFile.data.numCols();
 		assertThat(dataCols).isEqualTo(numFields);
+	}
+
+	@Test
+	public void testSaveTxt() throws IOException, URISyntaxException {
+		File tmpFile = tempFolder.newFile();
+		posFile.saveTxt(tmpFile);
+		URI resource = Resources.getResource("ag501.txt").toURI();
+		File txtFile = new File(resource);
+		assertThat(tmpFile).hasContentEqualTo(txtFile);
 	}
 }
