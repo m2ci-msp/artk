@@ -33,8 +33,13 @@ public class AG500PosFileTest {
 	}
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() throws IOException {
 		posFile = new AG500PosFile(file);
+	}
+
+	@Test
+	public void testNumberOfChannels() {
+		assertThat(posFile.getNumberOfChannels()).isEqualTo(12);
 	}
 
 	@Test
@@ -44,9 +49,8 @@ public class AG500PosFileTest {
 
 	@Test
 	public void testData() {
-		int numFields = posFile.getNumberOfFieldsPerFrame();
 		int dataCols = posFile.data.numCols();
-		assertThat(dataCols).isEqualTo(numFields);
+		assertThat(dataCols).isEqualTo(84);
 		int dataRows = posFile.data.numRows();
 		assertThat(dataRows).isEqualTo(10);
 		double firstValue = posFile.data.get(0, 0);
@@ -62,5 +66,14 @@ public class AG500PosFileTest {
 		URI resource = Resources.getResource("ag500.txt").toURI();
 		File txtFile = new File(resource);
 		assertThat(tmpFile).hasContentEqualTo(txtFile);
+	}
+
+	@Test
+	public void testSaveBvh() throws IOException, URISyntaxException {
+		File tmpFile = tempFolder.newFile();
+		posFile.asBvh().writeTo(tmpFile);
+		URI resource = Resources.getResource("ag500.bvh").toURI();
+		File bvhFile = new File(resource);
+		assertThat(tmpFile).hasContentEqualTo(bvhFile);
 	}
 }

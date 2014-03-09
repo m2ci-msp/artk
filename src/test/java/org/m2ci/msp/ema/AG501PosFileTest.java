@@ -9,17 +9,22 @@ import java.net.URISyntaxException;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 import org.m2ci.msp.ema.AG501PosFile;
 
 import com.google.common.io.Resources;
 
-public class AG501PosFileTest extends AG500PosFileTest {
+public class AG501PosFileTest {
 
-	private AG501PosFile posFile;
+	@Rule
+	public TemporaryFolder tempFolder = new TemporaryFolder();
 
 	private static File file;
+
+	private AG501PosFile posFile;
 
 	@BeforeClass
 	public static void oneTimeSetup() throws URISyntaxException {
@@ -44,9 +49,14 @@ public class AG501PosFileTest extends AG500PosFileTest {
 
 	@Test
 	public void testData() {
-		int numFields = posFile.getNumberOfFieldsPerFrame();
 		int dataCols = posFile.data.numCols();
-		assertThat(dataCols).isEqualTo(numFields);
+		assertThat(dataCols).isEqualTo(112);
+		int dataRows = posFile.data.numRows();
+		assertThat(dataRows).isEqualTo(10);
+		double firstValue = posFile.data.get(0, 0);
+		assertThat(firstValue).isEqualTo(1);
+		double lastValue = posFile.data.get(9, 111);
+		assertThat(lastValue).isEqualTo(1120);
 	}
 
 	@Test
@@ -56,5 +66,14 @@ public class AG501PosFileTest extends AG500PosFileTest {
 		URI resource = Resources.getResource("ag501.txt").toURI();
 		File txtFile = new File(resource);
 		assertThat(tmpFile).hasContentEqualTo(txtFile);
+	}
+
+	@Test
+	public void testSaveBvh() throws IOException, URISyntaxException {
+		File tmpFile = tempFolder.newFile();
+		posFile.asBvh().writeTo(tmpFile);
+		URI resource = Resources.getResource("ag501.bvh").toURI();
+		File bvhFile = new File(resource);
+		assertThat(tmpFile).hasContentEqualTo(bvhFile);
 	}
 }

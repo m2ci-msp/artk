@@ -17,15 +17,14 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 
-public class AG500PosFile implements PosFile {
-
-	SimpleMatrix data;
+public class AG500PosFile extends PosFile {
 
 	protected AG500PosFile() {
 	}
 
 	public AG500PosFile(File file) throws IOException {
 		data = read(file);
+		initChannelNames();
 	}
 
 	protected SimpleMatrix read(File file) throws IOException {
@@ -57,7 +56,7 @@ public class AG500PosFile implements PosFile {
 		return 12;
 	}
 
-	public int getNumberOfFieldsPerChannel() {
+	public static int getNumberOfFieldsPerChannel() {
 		return Fields.values().length;
 	}
 
@@ -81,6 +80,7 @@ public class AG500PosFile implements PosFile {
 	}
 
 	public void saveTxt(File file) throws IOException {
+		// Files.write(from, to, charset);
 		Writer writer = Files.asCharSink(file, Charsets.UTF_8).openBufferedStream();
 		ArrayList<String> fields = Lists.newArrayListWithCapacity(getNumberOfFieldsPerFrame());
 		for (int c = 0; c < getNumberOfChannels(); c++) {
@@ -98,6 +98,22 @@ public class AG500PosFile implements PosFile {
 			Joiner.on("\t").appendTo(writer, fields).append("\n");
 		}
 		writer.close();
+	}
+	
+	// fluent converters
+
+	public BvhFile asBvh() {
+		int numRows = getNumberOfFrames();
+		int numCols = getNumberOfChannels() * BvhFile.getNumberOfFieldsPerChannel();
+		SimpleMatrix bvhData = new SimpleMatrix(numRows, numCols);
+		for (int channel = 0; channel < getNumberOfChannels(); channel++) {
+			int sourceCol = channel * getNumberOfFieldsPerChannel();
+			SimpleMatrix channelData = this.data.extractMatrix(0, SimpleMatrix.END, sourceCol, sourceCol + 5);
+			int targetCol = channel * BvhFile.getNumberOfFieldsPerChannel();
+			bvhData.insertIntoThis(0, targetCol, channelData);
+		}
+		BvhFile bvh = new BvhFile(bvhData).withSamplingFrequency(getSamplingFrequency()).withChannelNames(channelNames);
+		return bvh;
 	}
 
 	public enum Fields {
