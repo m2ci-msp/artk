@@ -44,13 +44,13 @@ public class AG501PosFileHeader {
 	}
 
 	public int getSamplingFrequency() {
-		if (numChannels < 0) {
+		if (samplingFrequency < 0) {
 			Matcher matcher = LINE_4.matcher(lines.get(3));
 			matcher.find();
 			String group = matcher.group(1);
-			numChannels = Integer.parseInt(group);
+			samplingFrequency = Integer.parseInt(group);
 		}
-		return numChannels;
+		return samplingFrequency;
 	}
 
 	public int getSize() {
