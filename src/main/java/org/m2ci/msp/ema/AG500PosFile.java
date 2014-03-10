@@ -3,7 +3,6 @@ package org.m2ci.msp.ema;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
-import java.nio.BufferUnderflowException;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.MappedByteBuffer;
@@ -28,28 +27,24 @@ public class AG500PosFile extends PosFile {
 	}
 
 	protected SimpleMatrix read(File file) throws IOException {
+		// read little-endian file to float array
 		MappedByteBuffer byteBuffer = Files.map(file);
 		byteBuffer.position(getHeaderSize());
 		byteBuffer.order(ByteOrder.LITTLE_ENDIAN);
 		FloatBuffer floatBuffer = byteBuffer.asFloatBuffer();
-		double[] fields = new double[getNumberOfFieldsPerFrame()];
-		SimpleMatrix matrix = null;
-		while (true) {
-			try {
-				for (int f = 0; f < fields.length; f++) {
-					fields[f] = floatBuffer.get();
-				}
-				DenseMatrix64F frame = DenseMatrix64F.wrap(1, fields.length, fields);
-				if (matrix == null) {
-					matrix = new SimpleMatrix(frame);
-				} else {
-					matrix = matrix.combine(SimpleMatrix.END, 0, SimpleMatrix.wrap(frame));
-				}
-			} catch (BufferUnderflowException e) {
-				break;
-			}
+		float[] floats = new float[floatBuffer.remaining()];
+		floatBuffer.get(floats);
+		// convert float array to double array
+		double[] doubles = new double[floats.length];
+		for (int f = 0; f < floats.length; f++) {
+			doubles[f] = floats[f];
 		}
-		return matrix;
+		// create data matrix
+		int numCols = getNumberOfFieldsPerFrame();
+		int numRows = doubles.length / numCols;
+		assert numCols * numRows == doubles.length;
+		DenseMatrix64F data = DenseMatrix64F.wrap(numRows, numCols, doubles);
+		return SimpleMatrix.wrap(data);
 	}
 
 	public int getNumberOfChannels() {
@@ -99,7 +94,7 @@ public class AG500PosFile extends PosFile {
 		}
 		writer.close();
 	}
-	
+
 	// fluent converters
 
 	public BvhFile asBvh() {

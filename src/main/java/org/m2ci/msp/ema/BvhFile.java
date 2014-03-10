@@ -1,10 +1,12 @@
 package org.m2ci.msp.ema;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import org.ejml.data.MatrixIterator;
 import org.ejml.simple.SimpleMatrix;
 
 import com.google.common.base.Charsets;
@@ -56,7 +58,7 @@ public class BvhFile {
 	// output
 
 	public void writeTo(File file) throws IOException {
-		StringBuilder bvh = new StringBuilder();
+		BufferedWriter bvh = Files.newWriter(file, Charsets.US_ASCII);
 		bvh.append("HIERARCHY\n");
 		for (int c = 0; c < getNumberOfChannels(); c++) {
 			bvh.append(String.format("ROOT %s\n", channelNames.get(c))).append("{\n");
@@ -69,14 +71,11 @@ public class BvhFile {
 		bvh.append("MOTION\n").append(String.format("Frames:\t%d\n", getNumberOfFrames()));
 		bvh.append(String.format("Frame Time:\t%f\n", 1 / samplingFrequency));
 		for (int row = 0; row < data.numRows(); row++) {
-			for (int c = 0; c < getNumberOfChannels(); c++) {
-				int col = c * getNumberOfFieldsPerChannel();
-				Joiner.on("\t").appendTo(bvh, data.iterator(true, row, col, row, col + 5)).append("\t");
-			}
-			bvh.setLength(bvh.length() - 1);
-			bvh.append("\n");
+			int numCols = data.numCols() - 1;
+			MatrixIterator fields = data.iterator(true, row, 0, row, numCols);
+			Joiner.on("\t").appendTo(bvh, fields).append("\n");
 		}
-		Files.write(bvh, file, Charsets.US_ASCII);
+		bvh.close();
 	}
 
 	public enum Fields {
