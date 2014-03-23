@@ -96,6 +96,19 @@ public class AG500PosFile extends PosFile {
 		return new AG500PosFile().withData(extractedData).withChannelNames(extractedNames);
 	}
 
+	public ArrayList<AG500PosFile> extractChannels(Collection<String> channelNames) {
+		ArrayList<AG500PosFile> posFiles = Lists.newArrayListWithCapacity(channelNames.size());
+		for (String channelName : channelNames) {
+			AG500PosFile posFile = extractChannel(channelName);
+			posFiles.add(posFile);
+		}
+		return posFiles;
+	}
+
+	public List<AG500PosFile> extractAllChannels() {
+		return extractChannels(channelNames);
+	}
+
 	public void saveTxt(File file) throws IOException {
 		// Files.write(from, to, charset);
 		Writer writer = Files.asCharSink(file, Charsets.UTF_8).openBufferedStream();
