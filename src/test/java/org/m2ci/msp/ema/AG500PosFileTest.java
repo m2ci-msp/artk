@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -15,9 +16,12 @@ import org.junit.rules.TemporaryFolder;
 
 import org.m2ci.msp.ema.AG500PosFile;
 
+import com.google.common.collect.Lists;
 import com.google.common.io.Resources;
 
 public class AG500PosFileTest {
+
+	static final int NUMBER_OF_CHANNELS = 12;
 
 	@Rule
 	public TemporaryFolder tempFolder = new TemporaryFolder();
@@ -39,12 +43,24 @@ public class AG500PosFileTest {
 
 	@Test
 	public void testNumberOfChannels() {
-		assertThat(posFile.getNumberOfChannels()).isEqualTo(12);
+		assertThat(posFile.getNumberOfChannels()).isEqualTo(NUMBER_OF_CHANNELS);
 	}
 
 	@Test
 	public void testNumberOfFields() {
-		assertThat(posFile.getNumberOfFieldsPerFrame()).isEqualTo(7 * 12);
+		assertThat(posFile.getNumberOfFieldsPerFrame()).isEqualTo(7 * NUMBER_OF_CHANNELS);
+	}
+
+	@Test
+	public void testSetChannelNames() {
+		ArrayList<String> newChannelNames = Lists.newArrayListWithCapacity(NUMBER_OF_CHANNELS);
+		for (int c = 1; c <= NUMBER_OF_CHANNELS; c++) {
+			String newName = String.format("Ch_%d", c);
+			newChannelNames.add(newName);
+		}
+		ArrayList<String> defaultChannelNames = posFile.getChannelNames();
+		ArrayList<String> manuallyAssignedDefaultChannelNames = posFile.withChannelNames(newChannelNames).getChannelNames();
+		assertThat(manuallyAssignedDefaultChannelNames).isEqualTo(defaultChannelNames);
 	}
 
 	@Test
