@@ -9,13 +9,9 @@ public class AG501PosFile extends AG500PosFile {
 
 	public AG501PosFile(File file) throws IOException {
 		header = new AG501PosFileHeader(file);
+		numberOfChannels = header.getNumberOfChannels();
 		data = read(file);
 		initChannelNames();
-	}
-
-	@Override
-	public int getNumberOfChannels() {
-		return header.getNumChannels();
 	}
 
 	@Override
@@ -23,6 +19,7 @@ public class AG501PosFile extends AG500PosFile {
 		return header.getSamplingFrequency();
 	}
 
+	@Override
 	public int getHeaderSize() {
 		int size = header.getSize() + 2;
 		return size;

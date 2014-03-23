@@ -44,7 +44,7 @@ public class AG501PosFileHeader {
 		samplingFrequency = Integer.parseInt(matcher.group(1));
 	}
 
-	public int getNumChannels() {
+	public int getNumberOfChannels() {
 		return numChannels;
 	}
 

@@ -7,6 +7,8 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.MappedByteBuffer;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.simple.SimpleMatrix;
@@ -22,6 +24,7 @@ public class AG500PosFile extends PosFile {
 	}
 
 	public AG500PosFile(File file) throws IOException {
+		numberOfChannels = 12;
 		data = read(file);
 		initChannelNames();
 	}
@@ -48,15 +51,24 @@ public class AG500PosFile extends PosFile {
 	}
 
 	public int getNumberOfChannels() {
-		return 12;
+		return numberOfChannels;
 	}
 
-	public static int getNumberOfFieldsPerChannel() {
-		return Fields.values().length;
+	public AG500PosFile withChannelNames(Collection<String> newChannelNames) {
+		setChannelNames(newChannelNames);
+		return this;
 	}
+
+	// parameters
 
 	public int getSamplingFrequency() {
 		return 200;
+	}
+
+	// data
+
+	public int getNumberOfFieldsPerChannel() {
+		return Fields.values().length;
 	}
 
 	public int getNumberOfFieldsPerFrame() {
@@ -66,12 +78,22 @@ public class AG500PosFile extends PosFile {
 		return fieldsPerFrame;
 	}
 
-	public int getNumberOfFrames() {
-		return data.numRows();
+	protected AG500PosFile withData(SimpleMatrix newData) {
+		setData(newData);
+		return this;
 	}
 
-	public int getHeaderSize() {
-		return 0;
+	public AG500PosFile extractChannel(String channelName) {
+		int channelIndex = getChannelIndex(channelName);
+		return extractChannel(channelIndex);
+	}
+
+	public AG500PosFile extractChannel(int channelIndex) {
+		int firstColumn = channelIndex * getNumberOfFieldsPerChannel();
+		int lastColumn = firstColumn + getNumberOfFieldsPerChannel();
+		SimpleMatrix extractedData = data.extractMatrix(0, SimpleMatrix.END, firstColumn, lastColumn);
+		List<String> extractedNames = channelNames.subList(channelIndex, channelIndex + 1);
+		return new AG500PosFile().withData(extractedData).withChannelNames(extractedNames);
 	}
 
 	public void saveTxt(File file) throws IOException {

@@ -34,7 +34,7 @@ public class AG501PosFileHeaderTest {
 
 	@Test
 	public void numChannelsTest() {
-		int channels = header.getNumChannels();
+		int channels = header.getNumberOfChannels();
 		assertThat(channels).isEqualTo(16);
 	}
 

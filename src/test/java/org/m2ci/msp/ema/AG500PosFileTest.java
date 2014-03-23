@@ -8,6 +8,10 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
+import org.ejml.data.DenseMatrix64F;
+import org.ejml.ops.EjmlUnitTests;
+import org.ejml.ops.MatrixIO;
+
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -61,6 +65,14 @@ public class AG500PosFileTest {
 		ArrayList<String> defaultChannelNames = posFile.getChannelNames();
 		ArrayList<String> manuallyAssignedDefaultChannelNames = posFile.withChannelNames(newChannelNames).getChannelNames();
 		assertThat(manuallyAssignedDefaultChannelNames).isEqualTo(defaultChannelNames);
+	}
+
+	@Test
+	public void testExtractChannel() throws URISyntaxException, IOException {
+		URI resource = Resources.getResource("ch03.csv").toURI();
+		DenseMatrix64F channel3 = MatrixIO.loadCSV(resource.getPath());
+		DenseMatrix64F extractedChannel = posFile.extractChannel(2).data.getMatrix();
+		EjmlUnitTests.assertEquals(extractedChannel, channel3, 0.01);
 	}
 
 	@Test

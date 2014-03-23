@@ -38,13 +38,8 @@ public class AG501PosFileTest {
 	}
 
 	@Test
-	public void testNumberOfChannels() {
-		assertThat(posFile.getNumberOfChannels()).isEqualTo(posFile.header.numChannels);
-	}
-
-	@Test
 	public void testNumberOfFields() {
-		assertThat(posFile.getNumberOfFieldsPerFrame()).isEqualTo(7 * posFile.header.getNumChannels());
+		assertThat(posFile.getNumberOfFieldsPerFrame()).isEqualTo(7 * posFile.getNumberOfChannels());
 	}
 
 	@Test
