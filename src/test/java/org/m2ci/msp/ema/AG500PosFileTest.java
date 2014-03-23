@@ -55,7 +55,7 @@ public class AG500PosFileTest {
 	public void testSetChannelNames() {
 		ArrayList<String> newChannelNames = Lists.newArrayListWithCapacity(NUMBER_OF_CHANNELS);
 		for (int c = 1; c <= NUMBER_OF_CHANNELS; c++) {
-			String newName = String.format("Ch_%d", c);
+			String newName = String.format("Ch%d", c);
 			newChannelNames.add(newName);
 		}
 		ArrayList<String> defaultChannelNames = posFile.getChannelNames();

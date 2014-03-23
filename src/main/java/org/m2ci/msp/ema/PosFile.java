@@ -20,7 +20,7 @@ public abstract class PosFile implements EmaFile {
 	protected void initChannelNames() {
 		channelNames = Lists.newArrayListWithCapacity(getNumberOfChannels());
 		for (int c = 1; c <= getNumberOfChannels(); c++) {
-			channelNames.add("Ch_" + c);
+			channelNames.add("Ch" + c);
 		}
 	}
 

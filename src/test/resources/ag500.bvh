@@ -1,5 +1,5 @@
 HIERARCHY
-ROOT Ch_1
+ROOT Ch1
 {
 	OFFSET	0	0	0
 	CHANNELS 6 XPosition YPosition ZPosition XRotation YRotation ZRotation
@@ -8,7 +8,7 @@ ROOT Ch_1
 		OFFSET	0	0	-1
 	}
 }
-ROOT Ch_2
+ROOT Ch2
 {
 	OFFSET	0	0	0
 	CHANNELS 6 XPosition YPosition ZPosition XRotation YRotation ZRotation
@@ -17,7 +17,7 @@ ROOT Ch_2
 		OFFSET	0	0	-1
 	}
 }
-ROOT Ch_3
+ROOT Ch3
 {
 	OFFSET	0	0	0
 	CHANNELS 6 XPosition YPosition ZPosition XRotation YRotation ZRotation
@@ -26,7 +26,7 @@ ROOT Ch_3
 		OFFSET	0	0	-1
 	}
 }
-ROOT Ch_4
+ROOT Ch4
 {
 	OFFSET	0	0	0
 	CHANNELS 6 XPosition YPosition ZPosition XRotation YRotation ZRotation
@@ -35,7 +35,7 @@ ROOT Ch_4
 		OFFSET	0	0	-1
 	}
 }
-ROOT Ch_5
+ROOT Ch5
 {
 	OFFSET	0	0	0
 	CHANNELS 6 XPosition YPosition ZPosition XRotation YRotation ZRotation
@@ -44,7 +44,7 @@ ROOT Ch_5
 		OFFSET	0	0	-1
 	}
 }
-ROOT Ch_6
+ROOT Ch6
 {
 	OFFSET	0	0	0
 	CHANNELS 6 XPosition YPosition ZPosition XRotation YRotation ZRotation
@@ -53,7 +53,7 @@ ROOT Ch_6
 		OFFSET	0	0	-1
 	}
 }
-ROOT Ch_7
+ROOT Ch7
 {
 	OFFSET	0	0	0
 	CHANNELS 6 XPosition YPosition ZPosition XRotation YRotation ZRotation
@@ -62,7 +62,7 @@ ROOT Ch_7
 		OFFSET	0	0	-1
 	}
 }
-ROOT Ch_8
+ROOT Ch8
 {
 	OFFSET	0	0	0
 	CHANNELS 6 XPosition YPosition ZPosition XRotation YRotation ZRotation
@@ -71,7 +71,7 @@ ROOT Ch_8
 		OFFSET	0	0	-1
 	}
 }
-ROOT Ch_9
+ROOT Ch9
 {
 	OFFSET	0	0	0
 	CHANNELS 6 XPosition YPosition ZPosition XRotation YRotation ZRotation
@@ -80,7 +80,7 @@ ROOT Ch_9
 		OFFSET	0	0	-1
 	}
 }
-ROOT Ch_10
+ROOT Ch10
 {
 	OFFSET	0	0	0
 	CHANNELS 6 XPosition YPosition ZPosition XRotation YRotation ZRotation
@@ -89,7 +89,7 @@ ROOT Ch_10
 		OFFSET	0	0	-1
 	}
 }
-ROOT Ch_11
+ROOT Ch11
 {
 	OFFSET	0	0	0
 	CHANNELS 6 XPosition YPosition ZPosition XRotation YRotation ZRotation
@@ -98,7 +98,7 @@ ROOT Ch_11
 		OFFSET	0	0	-1
 	}
 }
-ROOT Ch_12
+ROOT Ch12
 {
 	OFFSET	0	0	0
 	CHANNELS 6 XPosition YPosition ZPosition XRotation YRotation ZRotation
