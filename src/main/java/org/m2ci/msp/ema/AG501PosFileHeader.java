@@ -19,10 +19,11 @@ public class AG501PosFileHeader {
 	final Pattern LINE_2 = Pattern.compile("00000070");
 	final Pattern LINE_3 = Pattern.compile("NumberOfChannels=(\\d+)");
 	final Pattern LINE_4 = Pattern.compile("SamplingFrequencyHz=(\\d+)");
+	private Matcher matcher;
 	ArrayList<String> lines = Lists.newArrayList();
 
-	int numChannels = Integer.MIN_VALUE;
-	int samplingFrequency = Integer.MIN_VALUE;
+	int numChannels;
+	int samplingFrequency;
 
 	public AG501PosFileHeader(File file) throws IOException {
 		CharSource source = Files.asCharSource(file, Charsets.UTF_8);
@@ -31,25 +32,23 @@ public class AG501PosFileHeader {
 			String line = stream.readLine();
 			lines.add(line);
 		}
+
+		// set number of channels
+		matcher = LINE_3.matcher(lines.get(2));
+		matcher.find();
+		numChannels = Integer.parseInt(matcher.group(1));
+
+		// set sampling frequency
+		matcher = LINE_4.matcher(lines.get(3));
+		matcher.find();
+		samplingFrequency = Integer.parseInt(matcher.group(1));
 	}
 
 	public int getNumChannels() {
-		if (numChannels < 0) {
-			Matcher matcher = LINE_3.matcher(lines.get(2));
-			matcher.find();
-			String group = matcher.group(1);
-			numChannels = Integer.parseInt(group);
-		}
 		return numChannels;
 	}
 
 	public int getSamplingFrequency() {
-		if (samplingFrequency < 0) {
-			Matcher matcher = LINE_4.matcher(lines.get(3));
-			matcher.find();
-			String group = matcher.group(1);
-			samplingFrequency = Integer.parseInt(group);
-		}
 		return samplingFrequency;
 	}
 
