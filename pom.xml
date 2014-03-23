@@ -15,6 +15,13 @@
 	</organization>
 	<inceptionYear>2011</inceptionYear>
 
+	<licenses>
+		<license>
+			<name>GNU General Public License v3.0 or later</name>
+			<url>http://www.spdx.org/licenses/GPL-3.0+</url>
+		</license>
+	</licenses>
+
 	<developers>
 		<developer>
 			<id>psibre</id>
