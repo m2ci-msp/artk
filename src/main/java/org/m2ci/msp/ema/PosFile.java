@@ -3,6 +3,7 @@ package org.m2ci.msp.ema;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 
 import org.ejml.simple.SimpleMatrix;
@@ -23,12 +24,20 @@ public abstract class PosFile implements EmaFile {
 		}
 	}
 
-	public PosFile withChannelNames(ArrayList<String> newChannelNames) {
+	public ArrayList<String> getChannelNames() {
+		return channelNames;
+	}
+
+	public void setChannelNames(Collection<String> newChannelNames) {
 		if (newChannelNames.size() != getNumberOfChannels()) {
 			throw new IllegalArgumentException(String.format("Expected %d channel names, but got %d", getNumberOfChannels(),
 					newChannelNames.size()));
 		}
-		Collections.copy(channelNames, newChannelNames);
+		Collections.copy(channelNames, Lists.newArrayList(newChannelNames));
+	}
+
+	public PosFile withChannelNames(Collection<String> newChannelNames) {
+		setChannelNames(newChannelNames);
 		return this;
 	}
 
