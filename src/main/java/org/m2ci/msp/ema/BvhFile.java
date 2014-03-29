@@ -1,34 +1,39 @@
 package org.m2ci.msp.ema;
 
-import java.io.BufferedWriter;
-import java.io.File;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import org.ejml.data.MatrixIterator;
 import org.ejml.simple.SimpleMatrix;
 
-import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
-import com.google.common.io.Files;
+import com.google.common.collect.Lists;
 
-public class BvhFile {
+public class BvhFile extends TextFile {
 
+	protected int numberOfChannels;
 	float samplingFrequency;
-	SimpleMatrix data;
-	private ArrayList<String> channelNames;
 
 	public BvhFile(SimpleMatrix data) {
-		this.data = data;
+		super(data);
+		numberOfChannels = data.numCols() / getNumberOfFieldsPerChannel();
 	}
 
 	public int getNumberOfChannels() {
-		return data.numCols() / getNumberOfFieldsPerChannel();
+		return numberOfChannels;
 	}
 
 	public static int getNumberOfFieldsPerChannel() {
 		return Fields.values().length;
+	}
+
+	public ArrayList<String> getFieldNames() {
+		ArrayList<String> names = Lists.newArrayListWithCapacity(getNumberOfFieldsPerChannel());
+		for (Fields field : Fields.values()) {
+			names.add(field.toString());
+		}
+		return names;
 	}
 
 	public int getNumberOfFrames() {
@@ -57,28 +62,22 @@ public class BvhFile {
 
 	// output
 
-	public void writeTo(File file) throws IOException {
-		BufferedWriter bvh = Files.newWriter(file, Charsets.US_ASCII);
+	@Override
+	protected void writeHeader(Writer bvh) throws IOException {
 		bvh.append("HIERARCHY\n");
 		for (int c = 0; c < getNumberOfChannels(); c++) {
 			bvh.append(String.format("ROOT %s\n", channelNames.get(c))).append("{\n");
 			bvh.append(String.format("\tOFFSET\t%.0f\t%.0f\t%.0f\n", 0f, 0f, 0f));
 			bvh.append(String.format("\tCHANNELS %d ", getNumberOfFieldsPerChannel()));
-			Joiner.on(" ").appendTo(bvh, Fields.values()).append("\n");
+			Joiner.on(" ").appendTo(bvh, getFieldNames()).append("\n");
 			bvh.append("\tEnd Site\n").append("\t{\n");
 			bvh.append(String.format("\t\tOFFSET\t%.0f\t%.0f\t%.0f\n", 0f, 0f, -1f)).append("\t}\n").append("}\n");
 		}
 		bvh.append("MOTION\n").append(String.format("Frames:\t%d\n", getNumberOfFrames()));
 		bvh.append(String.format("Frame Time:\t%f\n", 1 / samplingFrequency));
-		for (int row = 0; row < data.numRows(); row++) {
-			int numCols = data.numCols() - 1;
-			MatrixIterator fields = data.iterator(true, row, 0, row, numCols);
-			Joiner.on("\t").appendTo(bvh, fields).append("\n");
-		}
-		bvh.close();
-	}
+	};
 
-	public enum Fields {
+	private enum Fields {
 		XPOSITION {
 			public String toString() {
 				return "XPosition";

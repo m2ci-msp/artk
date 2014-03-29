@@ -91,7 +91,7 @@ public class AG501PosFileTest {
 	@Test
 	public void testSaveBvh() throws IOException, URISyntaxException {
 		File tmpFile = tempFolder.newFile();
-		posFile.asBvh().writeTo(tmpFile);
+		posFile.asBvh().withPrecision(1).writeTo(tmpFile);
 		URI resource = Resources.getResource("ag501.bvh").toURI();
 		File bvhFile = new File(resource);
 		assertThat(tmpFile).hasContentEqualTo(bvhFile);
