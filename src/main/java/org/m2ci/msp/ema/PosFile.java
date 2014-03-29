@@ -60,6 +60,8 @@ public abstract class PosFile implements EmaFile {
 
 	abstract public int getNumberOfFieldsPerFrame();
 
+	abstract ArrayList<String> getFrameFieldNames();
+
 	public int getHeaderSize() {
 		return 0;
 	}

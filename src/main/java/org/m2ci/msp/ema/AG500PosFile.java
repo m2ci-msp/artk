@@ -2,7 +2,6 @@ package org.m2ci.msp.ema;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.Writer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.MappedByteBuffer;
@@ -13,8 +12,6 @@ import java.util.List;
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.simple.SimpleMatrix;
 
-import com.google.common.base.Charsets;
-import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 
@@ -78,6 +75,25 @@ public class AG500PosFile extends PosFile {
 		return fieldsPerFrame;
 	}
 
+	public ArrayList<String> getFieldNames() {
+		ArrayList<String> names = Lists.newArrayListWithCapacity(getNumberOfFieldsPerChannel());
+		for (Fields field : Fields.values()) {
+			names.add(field.toString());
+		}
+		return names;
+	}
+
+	public ArrayList<String> getFrameFieldNames() {
+		ArrayList<String> names = Lists.newArrayListWithCapacity(getNumberOfFieldsPerFrame());
+		for (String channel : getChannelNames()) {
+			for (String field : getFieldNames()) {
+				String name = String.format("%s_%s", channel, field);
+				names.add(name);
+			}
+		}
+		return names;
+	}
+
 	protected AG500PosFile withData(SimpleMatrix newData) {
 		setData(newData);
 		return this;
@@ -109,28 +125,12 @@ public class AG500PosFile extends PosFile {
 		return extractChannels(channelNames);
 	}
 
-	public void saveTxt(File file) throws IOException {
-		// Files.write(from, to, charset);
-		Writer writer = Files.asCharSink(file, Charsets.UTF_8).openBufferedStream();
-		ArrayList<String> fields = Lists.newArrayListWithCapacity(getNumberOfFieldsPerFrame());
-		for (int c = 0; c < getNumberOfChannels(); c++) {
-			for (int f = 0; f < getNumberOfFieldsPerChannel(); f++) {
-				fields.add(String.format("Ch%d_%s", c + 1, Fields.values()[f]));
-			}
-		}
-		Joiner.on("\t").appendTo(writer, fields).append("\n");
-		for (int row = 0; row < getNumberOfFrames(); row++) {
-			fields.clear();
-			for (int col = 0; col < getNumberOfFieldsPerFrame(); col++) {
-				double value = data.get(row, col);
-				fields.add(String.format("%.2f", value));
-			}
-			Joiner.on("\t").appendTo(writer, fields).append("\n");
-		}
-		writer.close();
-	}
-
 	// fluent converters
+
+	public TextFile asText() {
+		TextFile txt = new TextFile(data).withChannelNames(getFrameFieldNames());
+		return txt;
+	}
 
 	public BvhFile asBvh() {
 		int numRows = getNumberOfFrames();
@@ -146,7 +146,7 @@ public class AG500PosFile extends PosFile {
 		return bvh;
 	}
 
-	public enum Fields {
+	protected enum Fields {
 		X, Y, Z, PHI {
 			public String toString() {
 				return "phi";

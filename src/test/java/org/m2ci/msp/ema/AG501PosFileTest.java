@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.EjmlUnitTests;
@@ -19,6 +20,9 @@ import org.junit.rules.TemporaryFolder;
 
 import org.m2ci.msp.ema.AG501PosFile;
 
+import com.google.common.base.Charsets;
+import com.google.common.collect.Lists;
+import com.google.common.io.Files;
 import com.google.common.io.Resources;
 
 public class AG501PosFileTest {
@@ -47,6 +51,15 @@ public class AG501PosFileTest {
 	}
 
 	@Test
+	public void testFrameFieldNames() throws URISyntaxException, IOException {
+		ArrayList<String> frameFieldNames = posFile.getFrameFieldNames();
+		File txtFile = new File(Resources.getResource("ag501.txt").toURI());
+		String headerLine = Files.readFirstLine(txtFile, Charsets.US_ASCII);
+		ArrayList<String> headerFields = Lists.newArrayList(headerLine.split("\t"));
+		assertThat(frameFieldNames).isEqualTo(headerFields);
+	}
+
+	@Test
 	public void testExtractChannel() throws URISyntaxException, IOException {
 		URI resource = Resources.getResource("ag501ch03.csv").toURI();
 		DenseMatrix64F channel3 = MatrixIO.loadCSV(resource.getPath());
@@ -69,7 +82,7 @@ public class AG501PosFileTest {
 	@Test
 	public void testSaveTxt() throws IOException, URISyntaxException {
 		File tmpFile = tempFolder.newFile();
-		posFile.saveTxt(tmpFile);
+		posFile.asText().withPrecision(2).writeTo(tmpFile);
 		URI resource = Resources.getResource("ag501.txt").toURI();
 		File txtFile = new File(resource);
 		assertThat(tmpFile).hasContentEqualTo(txtFile);

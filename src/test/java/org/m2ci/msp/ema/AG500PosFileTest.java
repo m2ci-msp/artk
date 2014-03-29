@@ -20,7 +20,9 @@ import org.junit.rules.TemporaryFolder;
 
 import org.m2ci.msp.ema.AG500PosFile;
 
+import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
+import com.google.common.io.Files;
 import com.google.common.io.Resources;
 
 public class AG500PosFileTest {
@@ -53,6 +55,15 @@ public class AG500PosFileTest {
 	@Test
 	public void testNumberOfFields() {
 		assertThat(posFile.getNumberOfFieldsPerFrame()).isEqualTo(7 * NUMBER_OF_CHANNELS);
+	}
+
+	@Test
+	public void testFrameFieldNames() throws URISyntaxException, IOException {
+		ArrayList<String> frameFieldNames = posFile.getFrameFieldNames();
+		File txtFile = new File(Resources.getResource("ag500.txt").toURI());
+		String headerLine = Files.readFirstLine(txtFile, Charsets.US_ASCII);
+		ArrayList<String> headerFields = Lists.newArrayList(headerLine.split("\t"));
+		assertThat(frameFieldNames).isEqualTo(headerFields);
 	}
 
 	@Test
@@ -90,7 +101,7 @@ public class AG500PosFileTest {
 	@Test
 	public void testSaveTxt() throws IOException, URISyntaxException {
 		File tmpFile = tempFolder.newFile();
-		posFile.saveTxt(tmpFile);
+		posFile.asText().withPrecision(2).writeTo(tmpFile);
 		URI resource = Resources.getResource("ag500.txt").toURI();
 		File txtFile = new File(resource);
 		assertThat(tmpFile).hasContentEqualTo(txtFile);
