@@ -3,7 +3,6 @@ package org.m2ci.msp.ema;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Collections;
 
 import org.ejml.simple.SimpleMatrix;
 
@@ -12,16 +11,10 @@ import com.google.common.collect.Lists;
 
 public class BvhFile extends TextFile {
 
-	protected int numberOfChannels;
-	float samplingFrequency;
+	protected float samplingFrequency;
 
 	public BvhFile(SimpleMatrix data) {
-		super(data);
-		numberOfChannels = data.numCols() / getNumberOfFieldsPerChannel();
-	}
-
-	public int getNumberOfChannels() {
-		return numberOfChannels;
+		setData(data);
 	}
 
 	public static int getNumberOfFieldsPerChannel() {
@@ -43,21 +36,19 @@ public class BvhFile extends TextFile {
 	// fluent setters
 
 	public BvhFile withSamplingFrequency(float newSamplingFrequency) {
-		this.samplingFrequency = newSamplingFrequency;
+		samplingFrequency = newSamplingFrequency;
 		return this;
 	}
 
 	public BvhFile withChannelNames(ArrayList<String> newChannelNames) {
-		if (channelNames == null || channelNames.isEmpty()) {
-			channelNames = newChannelNames;
-			return this;
-		}
-		if (newChannelNames.size() != getNumberOfChannels()) {
-			throw new IllegalArgumentException(String.format("Expected %d channel names, but got %d", getNumberOfChannels(),
-					newChannelNames.size()));
-		}
-		Collections.copy(channelNames, newChannelNames);
+		setChannelNames(newChannelNames);
 		return this;
+	}
+
+	@Override
+	public void setData(SimpleMatrix newData) {
+		data = newData;
+		numberOfChannels = data.numCols() / getNumberOfFieldsPerChannel();
 	}
 
 	// output

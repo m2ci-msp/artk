@@ -21,12 +21,8 @@ public class TextFile extends EmaFile {
 	protected TextFile() {
 	}
 
-	public TextFile(SimpleMatrix newData) {
-		data = newData;
-	}
-
-	public int getNumberOfChannels() {
-		return data.numCols();
+	public TextFile(SimpleMatrix data) {
+		setData(data);
 	}
 
 	public ArrayList<String> getChannelNames() {

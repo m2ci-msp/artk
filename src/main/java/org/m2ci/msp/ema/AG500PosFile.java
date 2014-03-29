@@ -6,8 +6,6 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.MappedByteBuffer;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.simple.SimpleMatrix;
@@ -47,11 +45,7 @@ public class AG500PosFile extends PosFile {
 		return SimpleMatrix.wrap(data);
 	}
 
-	public int getNumberOfChannels() {
-		return numberOfChannels;
-	}
-
-	public AG500PosFile withChannelNames(Collection<String> newChannelNames) {
+	public AG500PosFile withChannelNames(ArrayList<String> newChannelNames) {
 		setChannelNames(newChannelNames);
 		return this;
 	}
@@ -94,7 +88,7 @@ public class AG500PosFile extends PosFile {
 		return names;
 	}
 
-	protected AG500PosFile withData(SimpleMatrix newData) {
+	public AG500PosFile withData(SimpleMatrix newData) {
 		setData(newData);
 		return this;
 	}
@@ -108,11 +102,11 @@ public class AG500PosFile extends PosFile {
 		int firstColumn = channelIndex * getNumberOfFieldsPerChannel();
 		int lastColumn = firstColumn + getNumberOfFieldsPerChannel();
 		SimpleMatrix extractedData = data.extractMatrix(0, SimpleMatrix.END, firstColumn, lastColumn);
-		List<String> extractedNames = channelNames.subList(channelIndex, channelIndex + 1);
+		ArrayList<String> extractedNames = Lists.newArrayList(channelNames.subList(channelIndex, channelIndex + 1));
 		return new AG500PosFile().withData(extractedData).withChannelNames(extractedNames);
 	}
 
-	public ArrayList<AG500PosFile> extractChannels(Collection<String> channelNames) {
+	public ArrayList<AG500PosFile> extractChannels(ArrayList<String> channelNames) {
 		ArrayList<AG500PosFile> posFiles = Lists.newArrayListWithCapacity(channelNames.size());
 		for (String channelName : channelNames) {
 			AG500PosFile posFile = extractChannel(channelName);
@@ -121,7 +115,7 @@ public class AG500PosFile extends PosFile {
 		return posFiles;
 	}
 
-	public List<AG500PosFile> extractAllChannels() {
+	public ArrayList<AG500PosFile> extractAllChannels() {
 		return extractChannels(channelNames);
 	}
 
