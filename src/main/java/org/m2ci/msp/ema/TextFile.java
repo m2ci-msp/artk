@@ -67,6 +67,11 @@ public class TextFile extends EmaFile {
 		writer.close();
 	}
 
+	public void writeTo(String path) throws IOException {
+		File file = new File(path);
+		writeTo(file);
+	}
+
 	public void setData(SimpleMatrix newData) {
 		data = newData;
 		numberOfChannels = data.numCols();

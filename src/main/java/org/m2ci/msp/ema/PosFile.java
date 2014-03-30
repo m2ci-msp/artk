@@ -25,6 +25,11 @@ public abstract class PosFile extends EmaFile {
 		}
 	}
 
+	public static PosFile loadFrom(String path) throws IOException {
+		File file = new File(path);
+		return loadFrom(file);
+	}
+
 	abstract public int getNumberOfFieldsPerChannel();
 
 	public void setData(SimpleMatrix newData) {
