@@ -1,8 +1,8 @@
 package org.m2ci.msp.ema;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
-import org.ejml.data.MatrixIterator;
 import org.ejml.simple.SimpleMatrix;
 
 import com.google.common.collect.Lists;
@@ -13,7 +13,7 @@ public abstract class EmaFile {
 	protected int numberOfChannels;
 	protected ArrayList<String> channelNames;
 
-	SimpleMatrix times;
+	ArrayList<Double> times;
 	double timeOffset = 0;
 	double samplingFrequency = 1;
 
@@ -71,17 +71,55 @@ public abstract class EmaFile {
 
 	public void setTimeOffset(double newTimeOffset) {
 		timeOffset = newTimeOffset;
+		updateTimes();
 	}
 
 	protected void updateTimes() {
-		int numFrames = getNumberOfFrames();
-		times = new SimpleMatrix(numFrames, 1);
-		MatrixIterator iterator = times.iterator(true, 0, 0, numFrames - 1, 0);
+		if (times == null || times.isEmpty()) {
+			times = Lists.newArrayList(Collections.nCopies(getNumberOfFrames(), 0.0));
+		}
 		double time = 0.5 / getSamplingFrequency() + getTimeOffset();
-		while (iterator.hasNext()) {
-			iterator.next();
-			iterator.set(time);
+		for (int t = 0; t < times.size(); t++) {
+			times.set(t, time);
 			time += 1 / getSamplingFrequency();
 		}
+	}
+
+	public double getFirstSampleTime() {
+		return times.get(0);
+	}
+
+	public double getLastSampleTime() {
+		return times.get(times.size() - 1);
+	}
+
+	protected int findFirstValueGreaterThanOrEqualTo(double value, ArrayList<Double> values) {
+		for (int i = 0; i < values.size(); i++) {
+			if (values.get(i) >= value) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	protected int findLastValueLessThanOrEqualTo(double value, ArrayList<Double> values) {
+		for (int i = values.size() - 1; i >= 0; i--) {
+			if (values.get(i) <= value) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	abstract protected EmaFile extractFrameRange(int firstFrame, int lastFrame);
+
+	public EmaFile extractTimeRange(double startTime, double endTime) {
+		int firstFrame = findFirstValueGreaterThanOrEqualTo(startTime, times);
+		int lastFrame = findLastValueLessThanOrEqualTo(endTime, times);
+		if (firstFrame > lastFrame) {
+			throw new IllegalArgumentException(String.format("Requested times are out of range, should be between %f and %f",
+					times.get(0), times.get(times.size() - 1)));
+		}
+		return extractFrameRange(firstFrame, lastFrame);
 	}
 }

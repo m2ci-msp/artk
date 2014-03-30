@@ -90,8 +90,32 @@ public class TextFile extends EmaFile {
 		numberOfChannels = data.numCols();
 	}
 
+	public TextFile withData(SimpleMatrix data) {
+		setData(data);
+		return this;
+	}
+
 	public TextFile withSamplingFrequency(double newSamplingFrequency) {
 		setSamplingFrequency(newSamplingFrequency);
 		return this;
+	}
+
+	public TextFile withTimeOffset(double newTimeOffset) {
+		setTimeOffset(newTimeOffset);
+		return this;
+	}
+
+	@Override
+	protected TextFile extractFrameRange(int firstFrame, int lastFrame) {
+		int firstCol = 0;
+		int lastCol = data.numCols();
+		SimpleMatrix extractMatrix = data.extractMatrix(firstFrame, lastFrame, firstCol, lastCol);
+		double offset = times.get(firstFrame);
+		TextFile extraction = new TextFile().withData(extractMatrix).withChannelNames(getChannelNames())
+				.withSamplingFrequency(getSamplingFrequency()).withTimeOffset(offset).withPrecision(precision);
+		if (writeTimes) {
+			extraction = extraction.withTimes();
+		}
+		return extraction;
 	}
 }

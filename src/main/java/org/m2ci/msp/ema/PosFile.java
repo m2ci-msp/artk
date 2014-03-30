@@ -33,6 +33,9 @@ public abstract class PosFile extends EmaFile {
 	abstract public int getNumberOfFieldsPerChannel();
 
 	public void setData(SimpleMatrix newData) {
+		if (newData.getNumElements() == 0) {
+			throw new IllegalArgumentException("Cannot set empty data");
+		}
 		data = newData;
 		numberOfChannels = data.numCols() / getNumberOfFieldsPerChannel();
 		updateTimes();

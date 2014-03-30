@@ -115,4 +115,13 @@ public class AG500PosFileTest {
 		File bvhFile = new File(resource);
 		assertThat(tmpFile).hasContentEqualTo(bvhFile);
 	}
+
+	@Test
+	public void testTimeExtraction() {
+		double xmin = 0.004;
+		double xmax = 0.02;
+		AG500PosFile segment = (AG500PosFile) posFile.extractTimeRange(xmin, xmax);
+		assertThat(segment.getFirstSampleTime()).isGreaterThanOrEqualTo(xmin);
+		assertThat(segment.getLastSampleTime()).isLessThanOrEqualTo(xmax);
+	}
 }

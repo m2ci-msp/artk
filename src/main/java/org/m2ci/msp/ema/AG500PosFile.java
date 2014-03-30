@@ -22,6 +22,7 @@ public class AG500PosFile extends PosFile {
 		numberOfChannels = 12;
 		setData(read(file));
 		initChannelNames();
+		updateTimes();
 	}
 
 	protected SimpleMatrix read(File file) throws IOException {
@@ -94,6 +95,11 @@ public class AG500PosFile extends PosFile {
 		return this;
 	}
 
+	public AG500PosFile withTimeOffset(double newTimeOffset) {
+		setTimeOffset(newTimeOffset);
+		return this;
+	}
+
 	public AG500PosFile extractChannel(String channelName) {
 		int channelIndex = getChannelIndex(channelName);
 		return extractChannel(channelIndex);
@@ -118,6 +124,17 @@ public class AG500PosFile extends PosFile {
 
 	public ArrayList<AG500PosFile> extractAllChannels() {
 		return extractChannels(channelNames);
+	}
+
+	@Override
+	protected AG500PosFile extractFrameRange(int firstFrame, int lastFrame) {
+		int firstCol = 0;
+		int lastCol = data.numCols();
+		SimpleMatrix extractMatrix = data.extractMatrix(firstFrame, lastFrame, firstCol, lastCol);
+		double offset = times.get(firstFrame);
+		AG500PosFile extraction = new AG500PosFile().withData(extractMatrix).withTimeOffset(offset)
+				.withChannelNames(getChannelNames());
+		return extraction;
 	}
 
 	// fluent converters
