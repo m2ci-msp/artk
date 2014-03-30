@@ -2,6 +2,7 @@ package org.m2ci.msp.ema;
 
 import java.util.ArrayList;
 
+import org.ejml.data.MatrixIterator;
 import org.ejml.simple.SimpleMatrix;
 
 import com.google.common.collect.Lists;
@@ -12,7 +13,9 @@ public abstract class EmaFile {
 	protected int numberOfChannels;
 	protected ArrayList<String> channelNames;
 
-	double samplingFrequency;
+	SimpleMatrix times;
+	double timeOffset = 0;
+	double samplingFrequency = 1;
 
 	// channels
 
@@ -62,4 +65,23 @@ public abstract class EmaFile {
 		samplingFrequency = newSamplingFrequency;
 	}
 
+	public double getTimeOffset() {
+		return timeOffset;
+	}
+
+	public void setTimeOffset(double newTimeOffset) {
+		timeOffset = newTimeOffset;
+	}
+
+	protected void updateTimes() {
+		int numFrames = getNumberOfFrames();
+		times = new SimpleMatrix(numFrames, 1);
+		MatrixIterator iterator = times.iterator(true, 0, 0, numFrames - 1, 0);
+		double time = 0.5 / getSamplingFrequency() + getTimeOffset();
+		while (iterator.hasNext()) {
+			iterator.next();
+			iterator.set(time);
+			time += 1 / getSamplingFrequency();
+		}
+	}
 }

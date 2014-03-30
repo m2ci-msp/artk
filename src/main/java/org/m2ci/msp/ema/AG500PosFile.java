@@ -20,7 +20,7 @@ public class AG500PosFile extends PosFile {
 
 	public AG500PosFile(File file) throws IOException {
 		numberOfChannels = 12;
-		data = read(file);
+		setData(read(file));
 		initChannelNames();
 	}
 
@@ -123,7 +123,7 @@ public class AG500PosFile extends PosFile {
 	// fluent converters
 
 	public TextFile asText() {
-		TextFile txt = new TextFile(data).withChannelNames(getFrameFieldNames());
+		TextFile txt = new TextFile(data).withChannelNames(getFrameFieldNames()).withSamplingFrequency(getSamplingFrequency());
 		return txt;
 	}
 

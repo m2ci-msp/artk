@@ -63,7 +63,7 @@ public class BvhFile extends TextFile {
 			bvh.append(String.format("\t\tOFFSET\t%.0f\t%.0f\t%.0f\n", 0f, 0f, -1f)).append("\t}\n").append("}\n");
 		}
 		bvh.append("MOTION\n").append(String.format("Frames:\t%d\n", getNumberOfFrames()));
-		bvh.append(String.format("Frame Time:\t%f\n", 1 / samplingFrequency));
+		bvh.append(String.format("Frame Time:\t%f\n", 1 / getSamplingFrequency()));
 	};
 
 	private enum Fields {

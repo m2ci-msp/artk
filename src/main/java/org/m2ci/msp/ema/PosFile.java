@@ -35,6 +35,7 @@ public abstract class PosFile extends EmaFile {
 	public void setData(SimpleMatrix newData) {
 		data = newData;
 		numberOfChannels = data.numCols() / getNumberOfFieldsPerChannel();
+		updateTimes();
 	}
 
 	@Override

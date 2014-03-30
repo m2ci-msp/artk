@@ -17,6 +17,7 @@ import com.google.common.io.Files;
 public class TextFile extends EmaFile {
 
 	protected int precision = 6;
+	protected boolean writeTimes = false;
 
 	protected TextFile() {
 	}
@@ -43,16 +44,28 @@ public class TextFile extends EmaFile {
 		return this;
 	}
 
+	public TextFile withTimes() {
+		writeTimes = true;
+		updateTimes();
+		return this;
+	}
+
 	protected void writeHeader(Writer writer) throws IOException {
+		if (writeTimes) {
+			writer.append("Time\t");
+		}
 		Joiner.on("\t").appendTo(writer, getChannelNames()).append("\n");
 	}
 
 	protected void writeData(Writer writer) throws IOException {
 		String format = String.format("%%.%df", precision);
 		for (int row = 0; row < data.numRows(); row++) {
-			ArrayList<String> formattedFields = Lists.newArrayListWithCapacity(data.numRows());
-			int numCols = data.numCols() - 1;
-			MatrixIterator fields = data.iterator(true, row, 0, row, numCols);
+			if (writeTimes) {
+				writer.append(String.format(format, times.get(row))).append("\t");
+			}
+			int numCols = data.numCols();
+			ArrayList<String> formattedFields = Lists.newArrayListWithCapacity(numCols);
+			MatrixIterator fields = data.iterator(true, row, 0, row, numCols - 1);
 			while (fields.hasNext()) {
 				formattedFields.add(String.format(format, fields.next()));
 			}
@@ -75,5 +88,10 @@ public class TextFile extends EmaFile {
 	public void setData(SimpleMatrix newData) {
 		data = newData;
 		numberOfChannels = data.numCols();
+	}
+
+	public TextFile withSamplingFrequency(double newSamplingFrequency) {
+		setSamplingFrequency(newSamplingFrequency);
+		return this;
 	}
 }

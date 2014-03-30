@@ -10,7 +10,7 @@ public class AG501PosFile extends AG500PosFile {
 	public AG501PosFile(File file) throws IOException {
 		header = new AG501PosFileHeader(file);
 		numberOfChannels = header.getNumberOfChannels();
-		data = read(file);
+		setData(read(file));
 		initChannelNames();
 	}
 
