@@ -131,7 +131,7 @@ public class AG500PosFile extends PosFile {
 		int firstCol = 0;
 		int lastCol = data.numCols();
 		SimpleMatrix extractMatrix = data.extractMatrix(firstFrame, lastFrame, firstCol, lastCol);
-		double offset = times.get(firstFrame);
+		double offset = times.get(firstFrame) - 0.5 / getSamplingFrequency();
 		AG500PosFile extraction = new AG500PosFile().withData(extractMatrix).withTimeOffset(offset)
 				.withChannelNames(getChannelNames());
 		return extraction;
@@ -140,7 +140,8 @@ public class AG500PosFile extends PosFile {
 	// fluent converters
 
 	public TextFile asText() {
-		TextFile txt = new TextFile(data).withChannelNames(getFrameFieldNames()).withSamplingFrequency(getSamplingFrequency()).withTimeOffset(getTimeOffset());
+		TextFile txt = new TextFile(data).withChannelNames(getFrameFieldNames()).withSamplingFrequency(getSamplingFrequency())
+				.withTimeOffset(getTimeOffset());
 		return txt;
 	}
 

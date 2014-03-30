@@ -110,7 +110,7 @@ public class TextFile extends EmaFile {
 		int firstCol = 0;
 		int lastCol = data.numCols();
 		SimpleMatrix extractMatrix = data.extractMatrix(firstFrame, lastFrame, firstCol, lastCol);
-		double offset = times.get(firstFrame);
+		double offset = times.get(firstFrame) - 0.5 / getSamplingFrequency();
 		TextFile extraction = new TextFile().withData(extractMatrix).withChannelNames(getChannelNames())
 				.withSamplingFrequency(getSamplingFrequency()).withTimeOffset(offset).withPrecision(precision);
 		if (writeTimes) {
