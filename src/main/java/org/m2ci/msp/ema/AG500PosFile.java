@@ -52,7 +52,8 @@ public class AG500PosFile extends PosFile {
 
 	// parameters
 
-	public int getSamplingFrequency() {
+	@Override
+	public double getSamplingFrequency() {
 		return 200;
 	}
 

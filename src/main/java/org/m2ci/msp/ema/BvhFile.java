@@ -11,8 +11,6 @@ import com.google.common.collect.Lists;
 
 public class BvhFile extends TextFile {
 
-	protected float samplingFrequency;
-
 	public BvhFile(SimpleMatrix data) {
 		setData(data);
 	}
@@ -35,8 +33,8 @@ public class BvhFile extends TextFile {
 
 	// fluent setters
 
-	public BvhFile withSamplingFrequency(float newSamplingFrequency) {
-		samplingFrequency = newSamplingFrequency;
+	public BvhFile withSamplingFrequency(double newSamplingFrequency) {
+		setSamplingFrequency(newSamplingFrequency);
 		return this;
 	}
 

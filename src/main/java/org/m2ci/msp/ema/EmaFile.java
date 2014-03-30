@@ -12,6 +12,8 @@ public abstract class EmaFile {
 	protected int numberOfChannels;
 	protected ArrayList<String> channelNames;
 
+	double samplingFrequency;
+
 	// channels
 
 	protected void initChannelNames() {
@@ -50,4 +52,13 @@ public abstract class EmaFile {
 	}
 
 	abstract public void setData(SimpleMatrix newData);
+
+	public double getSamplingFrequency() {
+		return samplingFrequency;
+	}
+
+	public void setSamplingFrequency(double newSamplingFrequency) {
+		samplingFrequency = newSamplingFrequency;
+	}
+
 }

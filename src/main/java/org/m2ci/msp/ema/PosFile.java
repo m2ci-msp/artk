@@ -36,4 +36,9 @@ public abstract class PosFile extends EmaFile {
 		data = newData;
 		numberOfChannels = data.numCols() / getNumberOfFieldsPerChannel();
 	}
+
+	@Override
+	public void setSamplingFrequency(double newSamplingFrequency) {
+		throw new UnsupportedOperationException("The sampling frequency cannot be changed");
+	}
 }

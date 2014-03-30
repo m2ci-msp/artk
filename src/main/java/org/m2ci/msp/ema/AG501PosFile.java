@@ -15,7 +15,7 @@ public class AG501PosFile extends AG500PosFile {
 	}
 
 	@Override
-	public int getSamplingFrequency() {
+	public double getSamplingFrequency() {
 		return header.getSamplingFrequency();
 	}
 
