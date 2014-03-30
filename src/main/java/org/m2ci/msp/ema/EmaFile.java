@@ -17,10 +17,11 @@ public abstract class EmaFile {
 	// channels
 
 	protected void initChannelNames() {
-		channelNames = Lists.newArrayListWithCapacity(getNumberOfChannels());
+		ArrayList<String> names = Lists.newArrayListWithCapacity(getNumberOfChannels());
 		for (int c = 1; c <= getNumberOfChannels(); c++) {
-			channelNames.add("Ch" + c);
+			names.add("Ch" + c);
 		}
+		setChannelNames(names);
 	}
 
 	public int getNumberOfChannels() {
