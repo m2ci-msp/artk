@@ -25,6 +25,12 @@ public class EmaFileTest {
 			protected EmaFile extractFrameRange(int firstFrame, int lastFrame) {
 				return null;
 			}
+
+			@Override
+			public TextFile asText() {
+				// TODO Auto-generated method stub
+				return null;
+			}
 		};
 	}
 

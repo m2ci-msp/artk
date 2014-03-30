@@ -140,7 +140,7 @@ public class AG500PosFile extends PosFile {
 	// fluent converters
 
 	public TextFile asText() {
-		TextFile txt = new TextFile(data).withChannelNames(getFrameFieldNames()).withSamplingFrequency(getSamplingFrequency());
+		TextFile txt = new TextFile(data).withChannelNames(getFrameFieldNames()).withSamplingFrequency(getSamplingFrequency()).withTimeOffset(getTimeOffset());
 		return txt;
 	}
 

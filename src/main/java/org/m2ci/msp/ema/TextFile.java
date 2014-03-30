@@ -118,4 +118,8 @@ public class TextFile extends EmaFile {
 		}
 		return extraction;
 	}
+
+	public TextFile asText() {
+		return this;
+	}
 }

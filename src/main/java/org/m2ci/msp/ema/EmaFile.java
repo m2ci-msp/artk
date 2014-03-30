@@ -122,4 +122,6 @@ public abstract class EmaFile {
 		}
 		return extractFrameRange(firstFrame, lastFrame);
 	}
+
+	public abstract TextFile asText();
 }
