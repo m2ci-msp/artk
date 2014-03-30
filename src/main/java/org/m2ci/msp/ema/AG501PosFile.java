@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 import org.ejml.simple.SimpleMatrix;
 
+import com.google.common.collect.Lists;
+
 public class AG501PosFile extends AG500PosFile {
 
 	AG501PosFileHeader header;
@@ -60,6 +62,12 @@ public class AG501PosFile extends AG500PosFile {
 	public AG501PosFile withChannelNames(ArrayList<String> newChannelNames) {
 		setChannelNames(newChannelNames);
 		return this;
+	}
+
+	@Override
+	public AG501PosFile extractChannel(int channelIndex) {
+		return new AG501PosFile().withHeader(getHeader()).withData(extractChannelData(channelIndex))
+				.withChannelNames(Lists.newArrayList(channelNames.get(channelIndex)));
 	}
 
 	@Override

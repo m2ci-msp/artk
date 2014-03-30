@@ -105,12 +105,16 @@ public class AG500PosFile extends PosFile {
 		return extractChannel(channelIndex);
 	}
 
-	public AG500PosFile extractChannel(int channelIndex) {
+	protected SimpleMatrix extractChannelData(int channelIndex) {
 		int firstColumn = channelIndex * getNumberOfFieldsPerChannel();
 		int lastColumn = firstColumn + getNumberOfFieldsPerChannel();
 		SimpleMatrix extractedData = data.extractMatrix(0, SimpleMatrix.END, firstColumn, lastColumn);
-		ArrayList<String> extractedNames = Lists.newArrayList(channelNames.subList(channelIndex, channelIndex + 1));
-		return new AG500PosFile().withData(extractedData).withChannelNames(extractedNames);
+		return extractedData;
+	}
+
+	public AG500PosFile extractChannel(int channelIndex) {
+		return new AG500PosFile().withData(extractChannelData(channelIndex)).withChannelNames(
+				Lists.newArrayList(channelNames.get(channelIndex)));
 	}
 
 	public ArrayList<AG500PosFile> extractChannels(ArrayList<String> channelNames) {
