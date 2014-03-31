@@ -4,7 +4,7 @@
 
 	<groupId>org.m2ci.msp</groupId>
 	<artifactId>artk</artifactId>
-	<version>0.3</version>
+	<version>0.4-SNAPSHOT</version>
 
 	<name>ArTK</name>
 	<description>Articulatory data ToolKit</description>
@@ -31,7 +31,7 @@
 	<scm>
 		<url>https://github.com/psibre/artk</url>
 		<developerConnection>scm:git:git@github.com:psibre/artk.git</developerConnection>
-	  <tag>v0.3</tag>
+	  <tag>HEAD</tag>
   </scm>
 
 	<properties>
