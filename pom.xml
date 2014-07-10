@@ -29,6 +29,11 @@
 		</developer>
 	</developers>
 
+	<issueManagement>
+		<system>GitHub</system>
+		<url>https://github.com/psibre/artk/issues</url>
+	</issueManagement>
+
 	<scm>
 		<url>https://github.com/psibre/artk</url>
 		<developerConnection>scm:git:git@github.com:psibre/artk.git</developerConnection>
