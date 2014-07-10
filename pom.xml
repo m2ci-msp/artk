@@ -34,6 +34,13 @@
 		<developerConnection>scm:git:git@github.com:psibre/artk.git</developerConnection>
 	</scm>
 
+	<distributionManagement>
+		<repository>
+			<id>bintray</id>
+			<url>https://api.bintray.com/maven/psibre/maven/artk</url>
+		</repository>
+	</distributionManagement>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
