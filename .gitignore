@@ -6,5 +6,8 @@ target/
 .classpath
 .settings/
 
+# Git
+*.orig
+
 # OSX
 .DS_Store
