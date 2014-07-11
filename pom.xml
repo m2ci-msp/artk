@@ -5,7 +5,7 @@
 
 	<groupId>org.m2ci.msp</groupId>
 	<artifactId>artk</artifactId>
-	<version>0.4-SNAPSHOT</version>
+	<version>0.4</version>
 
 	<name>ArTK</name>
 	<description>Articulatory data ToolKit</description>
@@ -42,7 +42,7 @@
 	<distributionManagement>
 		<repository>
 			<id>bintray</id>
-			<url>https://api.bintray.com/maven/psibre/maven/artk</url>
+			<url>https://api.bintray.com/maven/mmci-msp/maven/artk</url>
 		</repository>
 	</distributionManagement>
 
