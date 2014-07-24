@@ -11,6 +11,8 @@ import com.google.common.collect.Lists;
 
 public class BvhFile extends TextFile {
 
+	private int root = -1;
+
 	public BvhFile(SimpleMatrix data) {
 		setData(data);
 	}
@@ -41,6 +43,24 @@ public class BvhFile extends TextFile {
 	public BvhFile withChannelNames(ArrayList<String> newChannelNames) {
 		setChannelNames(newChannelNames);
 		return this;
+	}
+
+	public BvhFile withRoot(String rootName) {
+		setRoot(rootName);
+		return this;
+	}
+
+	public BvhFile withRoot(int rootIndex) {
+		setRoot(rootIndex);
+		return this;
+	}
+
+	public void setRoot(String rootName) {
+		setRoot(getChannelIndex(rootName));
+	}
+
+	public void setRoot(int rootIndex) {
+		root = rootIndex;
 	}
 
 	@Override
