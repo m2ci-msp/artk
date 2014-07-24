@@ -1,6 +1,7 @@
 package org.m2ci.msp.ema;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 
@@ -75,16 +76,22 @@ public class BvhFile extends TextFile {
 	protected void writeHeader(Writer bvh) throws IOException {
 		bvh.append("HIERARCHY\n");
 		for (int c = 0; c < getNumberOfChannels(); c++) {
-			bvh.append(String.format("ROOT %s\n", channelNames.get(c))).append("{\n");
-			bvh.append(String.format("\tOFFSET\t%.0f\t%.0f\t%.0f\n", 0f, 0f, 0f));
-			bvh.append(String.format("\tCHANNELS %d ", getNumberOfFieldsPerChannel()));
-			Joiner.on(" ").appendTo(bvh, getFieldNames()).append("\n");
-			bvh.append("\tEnd Site\n").append("\t{\n");
-			bvh.append(String.format("\t\tOFFSET\t%.0f\t%.0f\t%.0f\n", 0f, 0f, -1f)).append("\t}\n").append("}\n");
+			bvh.append(formatHeaderRoot(channelNames.get(c)));
 		}
 		bvh.append("MOTION\n").append(String.format("Frames:\t%d\n", getNumberOfFrames()));
 		bvh.append(String.format("Frame Time:\t%f\n", 1 / getSamplingFrequency()));
-	};
+	}
+
+	private String formatHeaderRoot(String name) throws IOException {
+		StringWriter out = new StringWriter();
+		out.append(String.format("ROOT %s\n", name)).append("{\n");
+		out.append(String.format("\tOFFSET\t%.0f\t%.0f\t%.0f\n", 0f, 0f, 0f));
+		out.append(String.format("\tCHANNELS %d ", getNumberOfFieldsPerChannel()));
+		Joiner.on(" ").appendTo(out, getFieldNames()).append("\n");
+		out.append("\tEnd Site\n").append("\t{\n");
+		out.append(String.format("\t\tOFFSET\t%.0f\t%.0f\t%.0f\n", 0f, 0f, -1f)).append("\t}\n").append("}\n");
+		return out.toString();
+	}
 
 	private enum Fields {
 		XPOSITION {
