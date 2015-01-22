@@ -5,7 +5,7 @@
 
 	<groupId>org.m2ci.msp</groupId>
 	<artifactId>artk</artifactId>
-	<version>0.4</version>
+	<version>0.4.1</version>
 
 	<name>ArTK</name>
 	<description>Articulatory data ToolKit</description>
