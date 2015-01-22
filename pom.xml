@@ -27,22 +27,26 @@
 			<id>psibre</id>
 			<name>Ingmar Steiner</name>
 		</developer>
+		<developer>
+			<id>ahewer</id>
+			<name>Alexander Hewer</name>
+		</developer>
 	</developers>
 
 	<issueManagement>
 		<system>GitHub</system>
-		<url>https://github.com/psibre/artk/issues</url>
+		<url>https://github.com/m2ci-msp/artk/issues</url>
 	</issueManagement>
 
 	<scm>
-		<url>https://github.com/psibre/artk</url>
-		<developerConnection>scm:git:git@github.com:psibre/artk.git</developerConnection>
+		<url>https://github.com/m2ci-msp/artk</url>
+		<developerConnection>scm:git:git@github.com:m2ci-msp/artk.git</developerConnection>
 	</scm>
 
 	<distributionManagement>
 		<repository>
 			<id>bintray</id>
-			<url>https://api.bintray.com/maven/mmci-msp/maven/artk</url>
+			<url>https://api.bintray.com/maven/m2ci-msp/maven/artk</url>
 		</repository>
 	</distributionManagement>
 
