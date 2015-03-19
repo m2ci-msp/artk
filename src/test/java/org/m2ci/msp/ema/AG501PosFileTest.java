@@ -105,4 +105,12 @@ public class AG501PosFileTest {
 		assertThat(segment.getFirstSampleTime()).isGreaterThanOrEqualTo(xmin);
 		assertThat(segment.getLastSampleTime()).isLessThanOrEqualTo(xmax);
 	}
+	
+	@Test
+	public void smoothTest() throws IOException, URISyntaxException {
+		posFile.withSmoothedChannels(1);
+		
+		// FIXME: write a meaningful test
+		
+	}
 }

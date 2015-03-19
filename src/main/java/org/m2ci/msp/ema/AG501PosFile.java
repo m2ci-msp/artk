@@ -3,6 +3,7 @@ package org.m2ci.msp.ema;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Vector;
 
 import org.ejml.simple.SimpleMatrix;
 
@@ -13,6 +14,51 @@ public class AG501PosFile extends AG500PosFile {
 	AG501PosFileHeader header;
 
 	protected AG501PosFile() {
+	}
+
+	private Vector<Double> extractField(int fieldIndex) {
+
+		SimpleMatrix channelFieldDataMatrix = data.extractVector(false, fieldIndex);
+
+		Vector<Double> channelFieldDataVector = new Vector<Double>();
+
+		for (int i = 0; i < channelFieldDataMatrix.numRows(); ++i) {
+			channelFieldDataVector.add(channelFieldDataMatrix.get(i, 0));
+		}
+
+		return channelFieldDataVector;
+	}
+
+	public AG501PosFile withSmoothedChannels(double sigma) {
+
+		int column = 0;
+		for (int channel = 0; channel < numberOfChannels; ++channel) {
+
+			for (Fields field : Fields.values()) {
+
+				// do not smooth RMS and EXTRA fields
+				if (field == Fields.RMS || field == Fields.EXTRA) {
+					++column;
+					continue;
+				}
+
+				// smooth the field data
+				Vector<Double> currentField = extractField(column);
+				ChannelSmoother smoother = new ChannelSmoother(sigma);
+				Vector<Double> smoothedData = smoother.smoothChannel(currentField);
+
+				// write back to data
+				for (int i = 0; i < smoothedData.size(); ++i) {
+					data.set(i, column, smoothedData.get(i));
+				}
+
+				// proceed with next field
+				++column;
+
+			}
+		}
+
+		return this;
 	}
 
 	public AG501PosFile(File file) throws IOException {
