@@ -1,10 +1,15 @@
-# Maven
-target/
+# Gradle
+build/
+.gradle/
 
 # Eclipse
 .project
 .classpath
 .settings/
+
+# IDEA
+.idea/
+*.iml
 
 # Git
 *.orig
