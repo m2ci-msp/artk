@@ -2,7 +2,7 @@ branches:
   only:
     - master
 
-language: java
+language: groovy
 jdk:
   - openjdk6
   - openjdk7
