@@ -113,8 +113,8 @@ public class AG500PosFile extends PosFile {
 	}
 
 	public AG500PosFile extractChannel(int channelIndex) {
-		return new AG500PosFile().withData(extractChannelData(channelIndex)).withChannelNames(
-				Lists.newArrayList(channelNames.get(channelIndex)));
+		return new AG500PosFile().withData(extractChannelData(channelIndex))
+				.withChannelNames(Lists.newArrayList(channelNames.get(channelIndex)));
 	}
 
 	public ArrayList<AG500PosFile> extractChannels(ArrayList<String> channelNames) {
@@ -164,8 +164,9 @@ public class AG500PosFile extends PosFile {
 	}
 
 	public JsonFile asJson() {
+
 		int numRows = getNumberOfFrames();
-		int numCols = getNumberOfChannels() * BvhFile.getNumberOfFieldsPerChannel();
+		int numCols = getNumberOfChannels() * JsonFile.getNumberOfFieldsPerChannel();
 		SimpleMatrix jsonData = new SimpleMatrix(numRows, numCols);
 		for (int channel = 0; channel < getNumberOfChannels(); channel++) {
 			int sourceCol = channel * getNumberOfFieldsPerChannel();
@@ -176,7 +177,7 @@ public class AG500PosFile extends PosFile {
 		JsonFile json = new JsonFile(jsonData).withSamplingFrequency(getSamplingFrequency()).withChannelNames(channelNames);
 		return json;
 	}
-	
+
 	protected enum Fields {
 		X, Y, Z, PHI {
 			public String toString() {
