@@ -24,9 +24,11 @@ class HeadCorrection {
 		this.numberOfFieldsPerChannel = 6
 		this.numberOfChannels = ema.data.numCols() / this.numberOfFieldsPerChannel
 		this.data = ema.data
+		
+		this.referenceChannels = []
 
 		referenceChannels.each { channelName ->
-			this.referenceChannels.add(ema.getChannelNameIndex(channelName))
+			this.referenceChannels.add(ema.getChannelIndex(channelName))
 		}
 	}
 
@@ -67,10 +69,10 @@ class HeadCorrection {
 		def mean = new SimpleMatrix(3, 1)
 
 		referencePositions.each { position ->
-			mean.plus(position)
+			mean = mean.plus(position)
 		}
 
-		mean.divide(referencePositions.size())
+		mean = mean.divide(referencePositions.size())
 
 		return mean
 	}
@@ -80,13 +82,13 @@ class HeadCorrection {
 
 		def dyadicProducts = referencePositions.collect{ position ->
 			def centered = position.minus(mean)
-			centered.mult(centered.transpose())
+			return centered.mult(centered.transpose())
 		}
 
 		def structureTensor = new SimpleMatrix(3, 3)
 
 		dyadicProducts.each{ product ->
-			structureTensor.plus(product)
+			structureTensor = structureTensor.plus(product)
 		}
 
 		return structureTensor.svd().getV()
@@ -98,7 +100,7 @@ class HeadCorrection {
 		(0 .. this.numberOfChannels - 1).each { channelIndex ->
 
 			def position = getPosition(timeIndex, channelIndex)
-			def transformedPosition = this.rotation.mult(position.minus(this.mean))
+			def transformedPosition = this.rotation.mult(position.minus(this.origin))
 
 			setPosition(transformedPosition, timeIndex, channelIndex)
 
@@ -118,13 +120,15 @@ class HeadCorrection {
 				data.extractMatrix(
 				// stay at the same time
 				timeIndex,
-				timeIndex,
+				timeIndex + 1,
 				// extract the three fields relevant for the position
 				columnStart,
-				columnStart + 2)
+				columnStart + 3)
 
+		assert(position.vector == true)
+		
 		// transpose vector
-		position.transpose()
+		position = position.transpose()
 
 		return position
 

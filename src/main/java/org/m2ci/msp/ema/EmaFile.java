@@ -57,6 +57,10 @@ public abstract class EmaFile {
 
 	abstract public void setData(SimpleMatrix newData);
 
+	public SimpleMatrix getData() {
+		return data;
+	}
+	
 	public double getSamplingFrequency() {
 		return samplingFrequency;
 	}
