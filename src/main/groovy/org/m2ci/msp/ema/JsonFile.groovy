@@ -5,6 +5,8 @@ import org.ejml.simple.SimpleMatrix;
 
 public class JsonFile extends TextFile {
 
+        // TODO: output normals
+
 	// FIXME: Using the data field of the superclass
 	// results in a stackoverflow exception
 	SimpleMatrix data
