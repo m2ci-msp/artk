@@ -30,6 +30,7 @@ class HeadCorrection {
 		referenceChannels.each { channelName ->
 			this.referenceChannels.add(posFile.getChannelIndex(channelName))
 		}
+		
 	}
 
 
@@ -38,6 +39,8 @@ class HeadCorrection {
 		// iterate over the time
 		(0 .. this.data.numRows() - 1).each { timeIndex ->
 
+			// TODO: evaluate if time frame can be considered as stable
+			
 			// compute transformation matrix
 			computeTransformation(timeIndex)
 
@@ -52,11 +55,9 @@ class HeadCorrection {
 
 		// get the reference positions
 		def referencePositions =
-				this.referenceChannels.collect{ channelIndex ->
-					getPosition(timeIndex, channelIndex)
-				}
-
-		// TODO: evaluate if time frame can be considered as stable
+		 this.referenceChannels.collect{ channelIndex ->
+			getPosition(timeIndex, channelIndex)
+			}
 				
 		def mean = computeMean(referencePositions)
 		def rotation = computeRotation(referencePositions, mean)
@@ -77,6 +78,7 @@ class HeadCorrection {
 		mean = mean.divide(referencePositions.size())
 
 		return mean
+		
 	}
 
 	// uses PCA to derive the rotation matrix
@@ -131,8 +133,6 @@ class HeadCorrection {
 				columnStart,
 				columnStart + 3)
 
-		assert(position.vector == true)
-
 		// transpose vector
 		position = position.transpose()
 
@@ -140,11 +140,13 @@ class HeadCorrection {
 
 	}
 
+	// helper method for setting the position of the given channel at a specific time
 	void setPosition(position, timeIndex, channelIndex) {
 
 		// compute start column of channel
 		def columnStart = channelIndex * this.numberOfFieldsPerChannel
 
+		// set values
 		(0 .. 2).each{ index ->
 			this.data.set(timeIndex, columnStart + index, position.get(index, 0))
 		}
