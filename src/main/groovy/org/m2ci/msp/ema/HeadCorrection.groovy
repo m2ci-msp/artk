@@ -19,16 +19,16 @@ class HeadCorrection {
 	// matrix for mapping a vector into the local coordinate system
 	SimpleMatrix rotation
 
-	HeadCorrection(EmaFile ema, referenceChannels) {
+	HeadCorrection(AG500PosFile posFile, referenceChannels) {
 
-		this.numberOfFieldsPerChannel = 6
-		this.numberOfChannels = ema.data.numCols() / this.numberOfFieldsPerChannel
-		this.data = ema.data
-		
+		this.numberOfFieldsPerChannel = posFile.getNumberOfFieldsPerChannel()
+		this.numberOfChannels = posFile.data.numCols() / this.numberOfFieldsPerChannel
+		this.data = posFile.data
+
 		this.referenceChannels = []
 
 		referenceChannels.each { channelName ->
-			this.referenceChannels.add(ema.getChannelIndex(channelName))
+			this.referenceChannels.add(posFile.getChannelIndex(channelName))
 		}
 	}
 
@@ -45,7 +45,7 @@ class HeadCorrection {
 			applyTransformation(timeIndex)
 
 		}
-		
+
 	}
 
 	void computeTransformation(timeIndex) {
@@ -56,6 +56,8 @@ class HeadCorrection {
 					getPosition(timeIndex, channelIndex)
 				}
 
+		// TODO: evaluate if time frame can be considered as stable
+				
 		def mean = computeMean(referencePositions)
 		def rotation = computeRotation(referencePositions, mean)
 
@@ -91,7 +93,10 @@ class HeadCorrection {
 			structureTensor = structureTensor.plus(product)
 		}
 
-		return structureTensor.svd().getV()
+		// make sure that the transposed matrix is returned
+		def result = new SimpleMatrix(structureTensor.svd().getSVD().getV(null, true))
+
+		return result
 
 	}
 
@@ -100,7 +105,8 @@ class HeadCorrection {
 		(0 .. this.numberOfChannels - 1).each { channelIndex ->
 
 			def position = getPosition(timeIndex, channelIndex)
-			def transformedPosition = this.rotation.mult(position.minus(this.origin))
+			def shiftedPosition = position.minus(this.origin)
+			def transformedPosition = this.rotation.mult(shiftedPosition)
 
 			setPosition(transformedPosition, timeIndex, channelIndex)
 
@@ -126,7 +132,7 @@ class HeadCorrection {
 				columnStart + 3)
 
 		assert(position.vector == true)
-		
+
 		// transpose vector
 		position = position.transpose()
 
