@@ -8,9 +8,12 @@ class HeadCorrection {
 	SimpleMatrix data
 	int numberOfFieldsPerChannel
 	int numberOfChannels
-	def referenceChannels
-
-
+	
+	// reference channel indexes
+	def frontIndex
+	def leftIndex
+	def rightIndex
+	
 	// for representing the transformation
 
 	// origin of local coordinate system
@@ -19,17 +22,17 @@ class HeadCorrection {
 	// matrix for mapping a vector into the local coordinate system
 	SimpleMatrix rotation
 
-	HeadCorrection(AG500PosFile posFile, referenceChannels) {
+	HeadCorrection(AG500PosFile posFile, front, left, right) {
 
 		this.numberOfFieldsPerChannel = posFile.getNumberOfFieldsPerChannel()
 		this.numberOfChannels = posFile.data.numCols() / this.numberOfFieldsPerChannel
 		this.data = posFile.data
 
-		this.referenceChannels = []
-
-		referenceChannels.each { channelName ->
-			this.referenceChannels.add(posFile.getChannelIndex(channelName))
-		}
+		this.frontIndex = posFile.getChannelIndex(front)
+		this.leftIndex = posFile.getChannelIndex(left)
+		this.rightIndex = posFile.getChannelIndex(right)
+		
+		this.rotation = new SimpleMatrix(3, 3)
 		
 	}
 
@@ -54,51 +57,35 @@ class HeadCorrection {
 	void computeTransformation(timeIndex) {
 
 		// get the reference positions
-		def referencePositions =
-		 this.referenceChannels.collect{ channelIndex ->
-			getPosition(timeIndex, channelIndex)
-			}
-				
-		def mean = computeMean(referencePositions)
-		def rotation = computeRotation(referencePositions, mean)
-
-		this.origin = mean
-		this.rotation = rotation
-
-	}
-
-	def computeMean(referencePositions) {
-
-		def mean = new SimpleMatrix(3, 1)
-
-		referencePositions.each { position ->
-			mean = mean.plus(position)
-		}
-
-		mean = mean.divide(referencePositions.size())
-
-		return mean
+		def front = getPosition(timeIndex, frontIndex)
+		def left = getPosition(timeIndex, leftIndex)
+		def right = getPosition(timeIndex, rightIndex)
 		
+		computeOrigin(front, left, right)
+		computeRotation(front, left, right)
+
 	}
 
-	// uses PCA to derive the rotation matrix
-	def computeRotation(referencePositions, mean) {
+	void computeOrigin(front, left, right) {
+	
+		this.origin = front.plus(left.plus(right)).divide(3)
+			
+	}
 
-		def dyadicProducts = referencePositions.collect{ position ->
-			def centered = position.minus(mean)
-			return centered.mult(centered.transpose())
-		}
+	void computeRotation(front, left, right) {
 
-		def structureTensor = new SimpleMatrix(3, 3)
-
-		dyadicProducts.each{ product ->
-			structureTensor = structureTensor.plus(product)
-		}
-
-		// make sure that the transposed matrix is returned
-		def result = new SimpleMatrix(structureTensor.svd().getSVD().getV(null, true))
-
-		return result
+		def leftToRight = right.minus(left)
+		def leftToFront = front.minus(left)
+		
+		def zAxis = normalize(leftToRight)
+		def yAxis = normalize(cross(zAxis, leftToFront))
+		def xAxis = normalize(cross(zAxis, yAxis))
+		
+		(0 .. 2).each{ column ->
+			this.rotation.set(0, column, xAxis.get(column, 0))
+			this.rotation.set(1, column, yAxis.get(column, 0))
+			this.rotation.set(2, column, zAxis.get(column, 0))
+		} 
 
 	}
 
@@ -151,6 +138,32 @@ class HeadCorrection {
 			this.data.set(timeIndex, columnStart + index, position.get(index, 0))
 		}
 
+	}
+	
+	// helper method for computing the cross product
+	def cross(u, v) {
+	
+		def result = new SimpleMatrix(3, 1)
+		
+		// u_2 * v_3 - u_3 * v_2
+		result.set(0, 0, u.get(1) * v.get(2) - u.get(2) * v.get(1) )
+		// u_3 * v_1 - u_1 * v_3
+		result.set(1, 0, u.get(2) * v.get(0) - u.get(0) * v.get(2) )
+		// u_1 * v_2 - u_2 * v_1
+		result.set(2, 0, u.get(0) * v.get(1) - u.get(1) * v.get(0) )
+		
+		return result
+		
+	}
+	
+	// helper method for normalizing a vector
+	def normalize(u) {
+		
+		def squaredLength = u.transpose().mult(u)
+		def result = u.divide(Math.sqrt(squaredLength.get(0,0)))
+		
+		return result
+		
 	}
 
 }
