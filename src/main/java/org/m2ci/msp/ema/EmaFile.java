@@ -35,7 +35,7 @@ public abstract class EmaFile {
 		return channelNames;
 	}
 
-	protected int getChannelIndex(String channelName) {
+	public int getChannelIndex(String channelName) {
 		int channelIndex = getChannelNames().indexOf(channelName);
 		if (channelIndex < 0) {
 			throw new IllegalArgumentException(String.format("No channel named %s can be found.", channelName));
@@ -57,6 +57,10 @@ public abstract class EmaFile {
 
 	abstract public void setData(SimpleMatrix newData);
 
+	public SimpleMatrix getData() {
+		return data;
+	}
+	
 	public double getSamplingFrequency() {
 		return samplingFrequency;
 	}
