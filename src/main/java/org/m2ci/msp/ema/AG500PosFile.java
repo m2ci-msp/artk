@@ -99,6 +99,12 @@ public class AG500PosFile extends PosFile {
 		setTimeOffset(newTimeOffset);
 		return this;
 	}
+	
+	public AG500PosFile withHeadCorrection(String front, String left, String right) {
+		HeadCorrection correction = new HeadCorrection(this, front, left, right);
+		correction.performCorrection();
+		return this;
+	}
 
 	public AG500PosFile extractChannel(String channelName) {
 		int channelIndex = getChannelIndex(channelName);
