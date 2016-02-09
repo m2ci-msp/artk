@@ -45,8 +45,8 @@ public abstract class EmaFile {
 
 	public void setChannelNames(ArrayList<String> newChannelNames) {
 		if (newChannelNames.size() != getNumberOfChannels()) {
-			throw new IllegalArgumentException(String.format("Expected %d channel names, but got %d", getNumberOfChannels(),
-					newChannelNames.size()));
+			throw new IllegalArgumentException(
+					String.format("Expected %d channel names, but got %d", getNumberOfChannels(), newChannelNames.size()));
 		}
 		channelNames = Lists.newArrayList(newChannelNames);
 	}
@@ -63,6 +63,10 @@ public abstract class EmaFile {
 
 	public void setSamplingFrequency(double newSamplingFrequency) {
 		samplingFrequency = newSamplingFrequency;
+	}
+
+	public ArrayList<Double> getTimes() {
+		return times;
 	}
 
 	public double getTimeOffset() {

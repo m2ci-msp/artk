@@ -113,8 +113,8 @@ public class AG500PosFile extends PosFile {
 	}
 
 	public AG500PosFile extractChannel(int channelIndex) {
-		return new AG500PosFile().withData(extractChannelData(channelIndex)).withChannelNames(
-				Lists.newArrayList(channelNames.get(channelIndex)));
+		return new AG500PosFile().withData(extractChannelData(channelIndex))
+				.withChannelNames(Lists.newArrayList(channelNames.get(channelIndex)));
 	}
 
 	public ArrayList<AG500PosFile> extractChannels(ArrayList<String> channelNames) {
@@ -161,6 +161,21 @@ public class AG500PosFile extends PosFile {
 		}
 		BvhFile bvh = new BvhFile(bvhData).withSamplingFrequency(getSamplingFrequency()).withChannelNames(channelNames);
 		return bvh;
+	}
+
+	public JsonFile asJson() {
+
+		int numRows = getNumberOfFrames();
+		int numCols = getNumberOfChannels() * JsonFile.getNumberOfFieldsPerChannel();
+		SimpleMatrix jsonData = new SimpleMatrix(numRows, numCols);
+		for (int channel = 0; channel < getNumberOfChannels(); channel++) {
+			int sourceCol = channel * getNumberOfFieldsPerChannel();
+			SimpleMatrix channelData = this.data.extractMatrix(0, SimpleMatrix.END, sourceCol, sourceCol + 5);
+			int targetCol = channel * BvhFile.getNumberOfFieldsPerChannel();
+			jsonData.insertIntoThis(0, targetCol, channelData);
+		}
+		JsonFile json = new JsonFile(jsonData).withSamplingFrequency(getSamplingFrequency()).withChannelNames(channelNames);
+		return json;
 	}
 
 	protected enum Fields {

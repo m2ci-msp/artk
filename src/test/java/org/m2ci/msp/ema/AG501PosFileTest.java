@@ -98,6 +98,15 @@ public class AG501PosFileTest {
 	}
 
 	@Test
+	public void testSaveJson() throws IOException, URISyntaxException {
+		File tmpFile = tempFolder.newFile();
+		posFile.asJson().withTimes().writeTo(tmpFile);
+		URI resource = Resources.getResource("ag501.json").toURI();
+		File jsonFile = new File(resource);
+		assertThat(tmpFile).hasContentEqualTo(jsonFile);
+	}
+
+	@Test
 	public void testTimeExtraction() {
 		double xmin = 0.004;
 		double xmax = 0.02;
@@ -105,12 +114,12 @@ public class AG501PosFileTest {
 		assertThat(segment.getFirstSampleTime()).isGreaterThanOrEqualTo(xmin);
 		assertThat(segment.getLastSampleTime()).isLessThanOrEqualTo(xmax);
 	}
-	
+
 	@Test
 	public void smoothTest() throws IOException, URISyntaxException {
 		posFile.withSmoothedChannels(1);
-		
+
 		// FIXME: write a meaningful test
-		
+
 	}
 }
