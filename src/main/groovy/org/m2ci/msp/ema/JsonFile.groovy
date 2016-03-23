@@ -83,6 +83,8 @@ public class JsonFile extends TextFile {
 		if(writeTimes == true) {
 			json.timestamps = getTimes()
 		}
+		
+		json.samplingFrequency = this.samplingFrequency
 
 		def builder = new groovy.json.JsonBuilder(json)
 
