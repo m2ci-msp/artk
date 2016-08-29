@@ -37,3 +37,7 @@ test {
 jar {
     baseName = project.name.toLowerCase()
 }
+
+task wrapper(type: Wrapper) {
+      gradleVersion = '3.0'
+}
