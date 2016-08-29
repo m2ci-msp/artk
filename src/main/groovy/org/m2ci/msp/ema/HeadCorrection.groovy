@@ -2,6 +2,8 @@ package org.m2ci.msp.ema
 
 import org.ejml.simple.SimpleMatrix
 
+
+
 class HeadCorrection {
 
 	// Ema data structures
@@ -19,7 +21,15 @@ class HeadCorrection {
 	// origin of local coordinate system
 	SimpleMatrix origin
 
-	// matrix for mapping a vector into the local coordinate system
+	/* matrix for mapping a vector into the local coordinate system
+	 *
+	 * given a head, the orientation of coordinate system is:
+	 *
+	 * x-axis: left to right
+	 * y-axis: front to back
+	 * z-axis: bottom to top
+	 *
+	 */
 	SimpleMatrix rotation
 
 	HeadCorrection(AG500PosFile posFile, front, left, right) {
@@ -31,7 +41,6 @@ class HeadCorrection {
 		this.frontIndex = posFile.getChannelIndex(front)
 		this.leftIndex = posFile.getChannelIndex(left)
 		this.rightIndex = posFile.getChannelIndex(right)
-		
 		this.rotation = new SimpleMatrix(3, 3)
 		
 	}
@@ -75,11 +84,11 @@ class HeadCorrection {
 	void computeRotation(front, left, right) {
 
 		def leftToRight = right.minus(left)
-		def leftToFront = front.minus(left)
+		def frontToLeft = left.minus(front)
 		
-		def zAxis = normalize(leftToRight)
-		def yAxis = normalize(cross(zAxis, leftToFront))
-		def xAxis = normalize(cross(zAxis, yAxis))
+		def xAxis = normalize(leftToRight)
+		def zAxis = normalize(cross(frontToLeft, xAxis))
+		def yAxis = normalize(cross(xAxis, zAxis))
 		
 		(0 .. 2).each{ column ->
 			this.rotation.set(0, column, xAxis.get(column, 0))
