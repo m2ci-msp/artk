@@ -6,10 +6,10 @@ Articulatory data ToolKit
 
 ## Build
 
-Assemble the library with
+Build the library with
 
 ```
-./gradlew assemble
+./gradlew build
 ```
 
 The JAR file will be created in `build/libs`.
