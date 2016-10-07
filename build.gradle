@@ -12,7 +12,7 @@ repositories {
 }
 
 dependencies {
-    compile group: 'org.codehaus.groovy', name:'groovy-all', version: '2.4.5'
+    compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.4.5'
     compile group: 'com.google.guava', name: 'guava', version: '16.0.1'
     compile group: 'com.googlecode.efficient-java-matrix-library', name: 'ejml', version: '0.24'
     testCompile group: 'junit', name: 'junit', version: '4.11'
@@ -21,10 +21,10 @@ dependencies {
 
 // only use the groovy compiler
 sourceSets {
-  main {
-    java { srcDirs = [] }
-    groovy { srcDirs = ["src/main/java", "src/main/groovy"] }
-  }
+    main {
+        java { srcDirs = [] }
+        groovy { srcDirs = ["src/main/java", "src/main/groovy"] }
+    }
 }
 
 test {
@@ -36,8 +36,4 @@ test {
 
 jar {
     baseName = project.name.toLowerCase()
-}
-
-task wrapper(type: Wrapper) {
-      gradleVersion = '3.0'
 }
