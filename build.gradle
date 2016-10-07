@@ -1,6 +1,7 @@
 plugins {
     id 'groovy'
     id 'eclipse'
+    id 'maven-publish'
 }
 
 group 'org.m2ci.msp'
@@ -34,6 +35,31 @@ test {
     }
 }
 
-jar {
-    baseName = project.name.toLowerCase()
+task sourceJar(type: Jar) {
+    from sourceSets.main.allJava
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifact sourceJar {
+                classifier 'sources'
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            url "$buildDir/repo"
+        }
+        maven {
+            url version.endsWith('-SNAPSHOT') ? 'https://oss.jfrog.org/artifactory/oss-snapshot-local' : 'https://api.bintray.com/maven/m2ci-msp/maven/artk'
+            credentials {
+                username = findProperty('bintrayUser')
+                password = findProperty('bintrayApiKey')
+            }
+        }
+
+    }
 }
