@@ -33,7 +33,3 @@ test {
         exceptionFormat = 'full'
     }
 }
-
-jar {
-    baseName = project.name.toLowerCase()
-}
