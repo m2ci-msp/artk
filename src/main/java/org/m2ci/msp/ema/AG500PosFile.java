@@ -52,6 +52,7 @@ public class AG500PosFile extends PosFile {
 
 	public void writeTo(File file) throws IOException {
 		OutputStream stream = Files.asByteSink(file).openBufferedStream();
+		writeHeader(stream);
 		WritableByteChannel channel = Channels.newChannel(stream);
 		ByteBuffer buffer = ByteBuffer.allocate(1024);
 		buffer.order(ByteOrder.LITTLE_ENDIAN);
@@ -74,6 +75,10 @@ public class AG500PosFile extends PosFile {
 	public void writeTo(String path) throws IOException {
 		File file = new File(path);
 		writeTo(file);
+	}
+
+	protected void writeHeader(OutputStream stream) throws IOException {
+		return;
 	}
 
 	public AG500PosFile withChannelNames(ArrayList<String> newChannelNames) {

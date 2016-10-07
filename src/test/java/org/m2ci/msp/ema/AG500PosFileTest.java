@@ -122,7 +122,9 @@ public class AG500PosFileTest {
 		posFile.writeTo(tmpFile);
 		URI resource = Resources.getResource("ag500.pos").toURI();
 		File posFile = new File(resource);
-		assertThat(tmpFile).hasContentEqualTo(posFile);
+		byte[] expected = Files.asByteSource(posFile).read();
+		byte[] actual = Files.asByteSource(tmpFile).read();
+		assertThat(actual).isEqualTo(expected);
 	}
 
 	@Test
