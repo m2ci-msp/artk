@@ -1,6 +1,7 @@
 plugins {
     id 'groovy'
     id 'eclipse'
+    id 'maven-publish'
 }
 
 group 'org.m2ci.msp'
@@ -31,5 +32,19 @@ test {
     useJUnit()
     testLogging {
         exceptionFormat = 'full'
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+
+    repositories {
+        maven {
+            url "$buildDir/repo"
+        }
     }
 }
