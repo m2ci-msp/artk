@@ -2,9 +2,13 @@ package org.m2ci.msp.ema;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.MappedByteBuffer;
+import java.nio.channels.Channels;
+import java.nio.channels.WritableByteChannel;
 import java.util.ArrayList;
 
 import org.ejml.data.DenseMatrix64F;
@@ -44,6 +48,32 @@ public class AG500PosFile extends PosFile {
 		assert numCols * numRows == doubles.length;
 		DenseMatrix64F data = DenseMatrix64F.wrap(numRows, numCols, doubles);
 		return SimpleMatrix.wrap(data);
+	}
+
+	public void writeTo(File file) throws IOException {
+		OutputStream stream = Files.asByteSink(file).openBufferedStream();
+		WritableByteChannel channel = Channels.newChannel(stream);
+		ByteBuffer buffer = ByteBuffer.allocate(1024);
+		buffer.order(ByteOrder.LITTLE_ENDIAN);
+		for (int row = 0; row < getNumberOfFrames(); row++) {
+			for (int col = 0; col < getNumberOfFieldsPerFrame(); col++) {
+				double value = data.get(row, col);
+				if (buffer.remaining() < 16) {
+					buffer.flip();
+					channel.write(buffer);
+					buffer.clear();
+				}
+				buffer.putFloat((float) value);
+			}
+		}
+		buffer.flip();
+		channel.write(buffer);
+		stream.close();
+	}
+
+	public void writeTo(String path) throws IOException {
+		File file = new File(path);
+		writeTo(file);
 	}
 
 	public AG500PosFile withChannelNames(ArrayList<String> newChannelNames) {
@@ -99,7 +129,7 @@ public class AG500PosFile extends PosFile {
 		setTimeOffset(newTimeOffset);
 		return this;
 	}
-	
+
 	public AG500PosFile withHeadCorrection(String front, String left, String right) {
 		HeadCorrection correction = new HeadCorrection(this, front, left, right);
 		correction.performCorrection();
