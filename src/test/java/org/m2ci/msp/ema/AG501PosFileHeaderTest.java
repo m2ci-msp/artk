@@ -50,4 +50,11 @@ public class AG501PosFileHeaderTest {
 		assertThat(size).isEqualTo(68);
 	}
 
+	@Test
+	public void toStringTest() {
+		byte[] expected = "AG50xDATA_V002\n00000070\nNumberOfChannels=16\nSamplingFrequencyHz=250\n\u0000\u001A".getBytes();
+		byte[] actual = header.toString().getBytes();
+		assertThat(actual).isEqualTo(expected);
+	}
+
 }

@@ -60,4 +60,8 @@ public class AG501PosFileHeader {
 		return size;
 	}
 
+	public String toString() {
+		return String.format("AG50xDATA_V002\n00000070\nNumberOfChannels=%d\nSamplingFrequencyHz=%d\n\u0000\u001A",
+				getNumberOfChannels(), getSamplingFrequency());
+	}
 }

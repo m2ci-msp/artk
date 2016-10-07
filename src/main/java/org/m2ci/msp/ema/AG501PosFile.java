@@ -2,6 +2,7 @@ package org.m2ci.msp.ema;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -90,6 +91,13 @@ public class AG501PosFile extends AG500PosFile {
 	public int getHeaderSize() {
 		int size = header.getSize() + 2;
 		return size;
+	}
+
+	@Override
+	protected void writeHeader(OutputStream stream) throws IOException {
+		byte[] bytes = getHeader().toString().getBytes();
+		stream.write(bytes);
+		return;
 	}
 
 	@Override

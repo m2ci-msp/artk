@@ -107,6 +107,17 @@ public class AG501PosFileTest {
 	}
 
 	@Test
+	public void testSavePos() throws IOException, URISyntaxException {
+		File tmpFile = tempFolder.newFile();
+		posFile.writeTo(tmpFile);
+		URI resource = Resources.getResource("ag501.pos").toURI();
+		File posFile = new File(resource);
+		byte[] expected = Files.asByteSource(posFile).read();
+		byte[] actual = Files.asByteSource(tmpFile).read();
+		assertThat(actual).isEqualTo(expected);
+	}
+
+	@Test
 	public void testTimeExtraction() {
 		double xmin = 0.004;
 		double xmax = 0.02;
