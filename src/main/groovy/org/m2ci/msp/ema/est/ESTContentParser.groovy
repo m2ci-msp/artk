@@ -46,8 +46,8 @@ class ESTContentParser {
             def byteBuffer = ByteBuffer.wrap(bytes).order(byteOrder).asFloatBuffer()
 
             // read data
-            (1..byteBuffer.capacity()).each {
-                this.estData.correspondences[it % this.estData.correspondences.size() - 1].add(byteBuffer.get())
+            (0..byteBuffer.capacity() - 1).each {
+                this.estData.correspondences[it % this.estData.correspondences.size()].add(byteBuffer.get())
             }
 
         } // end if
