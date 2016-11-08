@@ -42,8 +42,8 @@ class ESTNaNRemover {
 
     private def interpolate(valueList, index) {
 
-        def leftIndex = -1
-        def rightIndex = -1
+        def leftIndex = null
+        def rightIndex = null
 
         // find index of left neighbor that is not a NaN
         leftIndex = (index..0).find { valueList[it] != Float.NaN }
@@ -51,7 +51,7 @@ class ESTNaNRemover {
         // find index of right neighbor that is not a NaN
         rightIndex = (index..valueList.size() - 1).find { valueList[it] != Float.NaN }
 
-        if (leftIndex == -1 || rightIndex == -1) {
+        if (leftIndex == null || rightIndex == null) {
             throw GroovyRuntimeException("Can not remove NaN value.")
         }
 
