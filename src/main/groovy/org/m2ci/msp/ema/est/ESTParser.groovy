@@ -2,8 +2,12 @@ package org.m2ci.msp.ema.est
 
 class ESTParser {
 
+    /////////////////////////////////////////////////////////////////////////////
+
     ESTParser() {
     }
+
+    /////////////////////////////////////////////////////////////////////////////
 
     def parse(fileName) {
 
@@ -16,8 +20,10 @@ class ESTParser {
         def contentParser = new ESTContentParser(estFile, estData)
         contentParser.parse()
 
-        return estData
+        return new ESTTrack(estData)
 
     }
+
+    /////////////////////////////////////////////////////////////////////////////
 
 }

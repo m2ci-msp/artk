@@ -16,44 +16,78 @@ class ESTContentParser {
 
     def parse() {
 
-        // get content
+        switch (this.estData.metaData["DataType"]) {
+
+            case "binary":
+                parseBinary()
+                break
+
+            case "ascii":
+                parseASCII()
+                break
+
+            default:
+                throw GroovyRuntimeException("Unknown data type.")
+                break
+
+        }
+
+    }
+
+    /////////////////////////////////////////////////////////////////////////////
+
+    private def parseBinary() {
+
+        def byteOrder = ByteOrder.LITTLE_ENDIAN
+
+        switch (this.estData.metaData["ByteOrder"]) {
+
+            case "01":
+                byteOrder = ByteOrder.LITTLE_ENDIAN
+                break
+
+            case "02":
+                byteOrder = ByteOrder.BIG_ENDIAN
+                break
+
+            default:
+                throw GroovyRuntimeException("Unknown byte order.")
+                break
+
+        }
+
         def data = this.estFile.getData()
 
-        if (this.estData.metaData["DataType"] == "binary") {
+        def bytes = data.getBytes(ESTFile.charSet)
 
-            def byteOrder = ByteOrder.LITTLE_ENDIAN
+        def byteBuffer = ByteBuffer.wrap(bytes).order(byteOrder).asFloatBuffer()
 
-
-            switch (this.estData.metaData["ByteOrder"]) {
-
-                case "01":
-                    byteOrder = ByteOrder.LITTLE_ENDIAN
-                    break
-
-                case "02":
-                    byteOrder = ByteOrder.BIG_ENDIAN
-                    break
-
-                default:
-                    throw GroovyRuntimeException("Unknown ByteOrder.")
-                    break
-
-            }
-
-
-            def bytes = data.getBytes("ISO-8859-1")
-
-            def byteBuffer = ByteBuffer.wrap(bytes).order(byteOrder).asFloatBuffer()
-
-            // read data
-            (0..byteBuffer.capacity() - 1).each {
-                this.estData.correspondences[it % this.estData.correspondences.size()].add(byteBuffer.get())
-            }
-
-        } // end if
-        else {
-            throw GroovyRuntimeException("Can only read binary data.")
+        // read data
+        (0..byteBuffer.capacity() - 1).each {
+            // use modulo operation to calculate position of currently read data
+            this.estData.correspondences[it % this.estData.correspondences.size()].add(byteBuffer.get())
         }
+
+
+    }
+
+    /////////////////////////////////////////////////////////////////////////////
+
+    private def parseASCII() {
+
+        def data = this.estFile.getData()
+
+        data.eachLine { line ->
+            if (line.startsWith(this.estData.metaData["CommentChar"]) == false) {
+                def tokens = line.tokenize();
+
+                (0..tokens.size() - 1).each { index ->
+                    this.estData.correspondences[index].add(tokens[index].toFloat())
+                }
+
+            } // end if
+
+        } // end eachLine
 
     }
 

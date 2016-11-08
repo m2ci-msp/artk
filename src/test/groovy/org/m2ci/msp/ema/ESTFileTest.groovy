@@ -30,8 +30,8 @@ class ESTFileTest {
     void testLoadFromBinaryChannelNames() {
         def posFile = new AG500PosFile(posBinaryFile)
         def estFile = new ESTParser().parse(estBinaryFile.path)
-        def actual = estFile.channelMap.keySet().collect()
-        def expected = ['timeStamps'] + posFile.channelNames
+        def actual = estFile.data.channelMap.keySet().collect()
+        def expected = ['timeStamp'] + posFile.channelNames
         assert actual == expected
     }
 
@@ -39,7 +39,7 @@ class ESTFileTest {
     void testLoadFromBinaryData() {
         def posFile = new AG500PosFile(posBinaryFile)
         def estFile = new ESTParser().parse(estBinaryFile.path)
-        def actual = estFile.channelMap.Ch1.theta
+        def actual = estFile.data.channelMap.Ch1.theta
         def ch1 = posFile.getChannelIndex('Ch1')
         def theta = 4
         def expected = posFile.data.extractMatrix(0, SimpleMatrix.END, ch1 + theta, ch1 + theta + 1).matrix.data
