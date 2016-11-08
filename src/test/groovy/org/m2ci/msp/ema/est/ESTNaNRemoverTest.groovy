@@ -35,6 +35,8 @@ class ESTNaNRemoverTest {
         def expected = values.clone()
         values[0] = Float.NaN
         def actual = values.clone()
+        // NaN will be filled with first non-NaN to the right
+        expected[0] = expected[1]
         remover.removeNaN(actual)
         assert actual == expected
     }
@@ -44,6 +46,8 @@ class ESTNaNRemoverTest {
         def expected = values.clone()
         values[-1] = Float.NaN
         def actual = values.clone()
+        // NaN will be filled with first non-NaN to the left
+        expected[-1] = expected[-2]
         remover.removeNaN(actual)
         assert actual == expected
     }
