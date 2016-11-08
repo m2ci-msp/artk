@@ -58,10 +58,10 @@ class ESTHeaderParser {
         this.estData.correspondences = []
 
         // first channel is always the time stamp
-        this.estData.channelMap["timeStamps"] = []
+        this.estData.channelMap["timeStamp"] = [values: []]
 
         // add correspondence
-        this.estData.correspondences.add(this.estData.channelMap["timeStamps"])
+        this.estData.correspondences.add(this.estData.channelMap["timeStamp"]["values"])
 
         // second channel is always the value 1
         this.estData.oneList = []
@@ -91,8 +91,8 @@ class ESTHeaderParser {
                     // special case: property name not present
                     channelName = channelData[0]
 
-                    // use value as property name
-                    channelProperty = "value"
+                    // use values as property name
+                    channelProperty = "values"
 
                 }
 
