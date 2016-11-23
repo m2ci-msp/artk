@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'org.m2ci.msp'
-version '0.5-SNAPSHOT'
+version '0.5'
 description 'Articulatory data ToolKit'
 
 sourceCompatibility = 1.7
