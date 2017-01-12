@@ -10,12 +10,12 @@ class HeadCorrection {
 	SimpleMatrix data
 	int numberOfFieldsPerChannel
 	int numberOfChannels
-	
+
 	// reference channel indexes
 	def frontIndex
 	def leftIndex
 	def rightIndex
-	
+
 	// for representing the transformation
 
 	// origin of local coordinate system
@@ -42,7 +42,7 @@ class HeadCorrection {
 		this.leftIndex = posFile.getChannelIndex(left)
 		this.rightIndex = posFile.getChannelIndex(right)
 		this.rotation = new SimpleMatrix(3, 3)
-		
+
 	}
 
 
@@ -52,7 +52,7 @@ class HeadCorrection {
 		(0 .. this.data.numRows() - 1).each { timeIndex ->
 
 			// TODO: evaluate if time frame can be considered as stable
-			
+
 			// compute transformation matrix
 			computeTransformation(timeIndex)
 
@@ -69,32 +69,32 @@ class HeadCorrection {
 		def front = getPosition(timeIndex, frontIndex)
 		def left = getPosition(timeIndex, leftIndex)
 		def right = getPosition(timeIndex, rightIndex)
-		
+
 		computeOrigin(front, left, right)
 		computeRotation(front, left, right)
 
 	}
 
 	void computeOrigin(front, left, right) {
-	
+
 		this.origin = front.plus(left.plus(right)).divide(3)
-			
+
 	}
 
 	void computeRotation(front, left, right) {
 
 		def leftToRight = right.minus(left)
 		def frontToLeft = left.minus(front)
-		
+
 		def xAxis = normalize(leftToRight)
-		def zAxis = normalize(cross(frontToLeft, xAxis))
-		def yAxis = normalize(cross(xAxis, zAxis))
-		
+		def zAxis = normalize(cross(xAxis, frontToLeft))
+		def yAxis = normalize(cross(zAxis, xAxis))
+
 		(0 .. 2).each{ column ->
 			this.rotation.set(0, column, xAxis.get(column, 0))
 			this.rotation.set(1, column, yAxis.get(column, 0))
 			this.rotation.set(2, column, zAxis.get(column, 0))
-		} 
+		}
 
 	}
 
@@ -148,31 +148,31 @@ class HeadCorrection {
 		}
 
 	}
-	
+
 	// helper method for computing the cross product
 	def cross(u, v) {
-	
+
 		def result = new SimpleMatrix(3, 1)
-		
+
 		// u_2 * v_3 - u_3 * v_2
 		result.set(0, 0, u.get(1) * v.get(2) - u.get(2) * v.get(1) )
 		// u_3 * v_1 - u_1 * v_3
 		result.set(1, 0, u.get(2) * v.get(0) - u.get(0) * v.get(2) )
 		// u_1 * v_2 - u_2 * v_1
 		result.set(2, 0, u.get(0) * v.get(1) - u.get(1) * v.get(0) )
-		
+
 		return result
-		
+
 	}
-	
+
 	// helper method for normalizing a vector
 	def normalize(u) {
-		
+
 		def squaredLength = u.transpose().mult(u)
 		def result = u.divide(Math.sqrt(squaredLength.get(0,0)))
-		
+
 		return result
-		
+
 	}
 
 }
