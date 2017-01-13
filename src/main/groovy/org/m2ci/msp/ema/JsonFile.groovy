@@ -83,7 +83,7 @@ public class JsonFile extends TextFile {
 		if(writeTimes == true) {
 			json.timestamps = getTimes()
 		}
-		
+
 		json.samplingFrequency = this.samplingFrequency
 
 		def builder = new groovy.json.JsonBuilder(json)
@@ -94,43 +94,25 @@ public class JsonFile extends TextFile {
 
 	private def getPositionData(channelName) {
 
-		// first get the index of the channel
-		def index = getChannelIndex(channelName);
-
-		// compute start column
-		def columnStart = index * getNumberOfFieldsPerChannel();
-
-		// extract submatrix view iterator of the wanted channel data
-		def channelFields = data.iterator(
-				// use row major ordering
-				true,
-				// start at first row
-				0,
-				// start at first column of channel
-				columnStart,
-				// use all time data
-				data.numRows() - 1,
-				// stop at last column of the position data in the channel
-				columnStart + 3 - 1);
-
-		// extract position data
-		def positionData = []
-
-		while (channelFields.hasNext()) {
-			positionData.add(channelFields.next());
-		}
-
-		return positionData;
+                // positional data is at offset 0 and contains 3 entries
+                return extractData(channelName, 0, 3)
 
 	}
 
 	private def getAngleData(channelName) {
 
+                // angle data is at offset 3 and contains 3 entries
+                return extractData(channelName, 3, 3)
+
+	}
+
+        private def extractData(channelName, dataOffset, dataSize) {
+
 		// first get the index of the channel
 		def index = getChannelIndex(channelName);
 
-		// compute start column of angle data
-		def columnStart = index * getNumberOfFieldsPerChannel() + 3;
+		// compute start column of the data to be extracted
+		def columnStart = index * getNumberOfFieldsPerChannel() + dataOffset;
 
 		// extract submatrix view iterator of the wanted channel data
 		def channelFields = data.iterator(
@@ -142,18 +124,19 @@ public class JsonFile extends TextFile {
 				columnStart,
 				// use all time data
 				data.numRows() - 1,
-				// stop at last column of the angle data in the channel
-				columnStart + 3 - 1);
+				// stop at last column of the data in the channel
+				columnStart + dataSize - 1);
 
-		// extract angle data
-		def angleData = []
+		// extract data
+		def data = []
 
 		while (channelFields.hasNext()) {
-			angleData.add(channelFields.next());
+			data.add(channelFields.next());
 		}
 
-		return angleData;
+		return data;
 
 	}
+
 
 }
