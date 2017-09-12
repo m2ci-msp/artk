@@ -17,5 +17,5 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 
-before_intall:
+before_install:
   - JAVA_HOME=$(jdk_switcher home openjdk8) ./gradlew
