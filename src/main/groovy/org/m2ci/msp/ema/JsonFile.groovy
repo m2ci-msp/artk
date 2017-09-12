@@ -66,11 +66,13 @@ public class JsonFile extends TextFile {
 			// build map for a single channel
 			def positionData = getPositionData(channelName)
 			def angleData = getAngleData(channelName)
+			def rmsData = getRMSData(channelName)
 
 			def channel = [:]
 
 			channel.position = positionData
 			channel.eulerAngles = angleData
+			channel.RMS = rmsData
 
 			channels."$channelName" = channel
 
@@ -103,6 +105,13 @@ public class JsonFile extends TextFile {
 
                 // angle data is at offset 3 and contains 2 entries
                 return extractData(channelName, 3, 2)
+
+	}
+
+	private def getRMSData(channelName) {
+
+	    // RMS data is at offset 5 and contains 1 entry
+	    return extractData(channelName, 5, 1)
 
 	}
 

@@ -211,7 +211,7 @@ public class AG500PosFile extends PosFile {
 		SimpleMatrix jsonData = new SimpleMatrix(numRows, numCols);
 		for (int channel = 0; channel < getNumberOfChannels(); channel++) {
 			int sourceCol = channel * getNumberOfFieldsPerChannel();
-			SimpleMatrix channelData = this.data.extractMatrix(0, SimpleMatrix.END, sourceCol, sourceCol + 5);
+			SimpleMatrix channelData = this.data.extractMatrix(0, SimpleMatrix.END, sourceCol, sourceCol + 6);
 			int targetCol = channel * BvhFile.getNumberOfFieldsPerChannel();
 			jsonData.insertIntoThis(0, targetCol, channelData);
 		}
