@@ -101,8 +101,8 @@ public class JsonFile extends TextFile {
 
 	private def getAngleData(channelName) {
 
-                // angle data is at offset 3 and contains 3 entries
-                return extractData(channelName, 3, 3)
+                // angle data is at offset 3 and contains 2 entries
+                return extractData(channelName, 3, 2)
 
 	}
 
