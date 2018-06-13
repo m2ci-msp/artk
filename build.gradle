@@ -50,6 +50,42 @@ publishing {
             artifact sourceJar {
                 classifier 'sources'
             }
+            pom {
+                name = project.name
+                description = project.description
+                organization {
+                    name = 'MMCI'
+                    url = 'http://m2ci.org/'
+                }
+                inceptionYear = '2011'
+                licenses {
+                    license {
+                        name = 'GNU General Public License v3.0 or later'
+                        url = 'https://www.gnu.org/licenses/gpl.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'psibre'
+                        name = 'Ingmar Steiner'
+                    }
+                    developer {
+                        id = 'ahewer'
+                        name = 'Alexander Hewer'
+                    }
+                }
+                issueManagement {
+                    system = 'GitHub'
+                    url = 'https://github.com/m2ci-msp/artk/issues'
+                }
+                scm {
+                    url = 'https://github.com/m2ci-msp/artk'
+                    developerConnection = 'scm:git:git@github.com:m2ci-msp/artk.git'
+                }
+                distributionManagement {
+                    downloadUrl = 'https://api.bintray.com/maven/m2ci-msp/maven/artk'
+                }
+            }
         }
     }
 
