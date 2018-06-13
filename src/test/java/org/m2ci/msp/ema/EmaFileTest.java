@@ -12,41 +12,41 @@ import com.google.common.collect.Lists;
 
 public class EmaFileTest {
 
-	private EmaFile emaFile;
+    private EmaFile emaFile;
 
-	@Before
-	public void setUp() {
-		emaFile = new EmaFile() {
-			@Override
-			public void setData(SimpleMatrix newData) {
-			}
+    @Before
+    public void setUp() {
+        emaFile = new EmaFile() {
+            @Override
+            public void setData(SimpleMatrix newData) {
+            }
 
-			@Override
-			protected EmaFile extractFrameRange(int firstFrame, int lastFrame) {
-				return null;
-			}
+            @Override
+            protected EmaFile extractFrameRange(int firstFrame, int lastFrame) {
+                return null;
+            }
 
-			@Override
-			public TextFile asText() {
-				// TODO Auto-generated method stub
-				return null;
-			}
-		};
-	}
+            @Override
+            public TextFile asText() {
+                // TODO Auto-generated method stub
+                return null;
+            }
+        };
+    }
 
-	@Test
-	public void testFindFirstValueGreaterThanOrEqualTo() {
-		ArrayList<Double> values = Lists.newArrayList(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0);
-		double threshold = 2.5;
-		int lowIndex = emaFile.findFirstValueGreaterThanOrEqualTo(threshold, values);
-		assertThat(lowIndex).isEqualTo(2); // 3.0 (index 2) is first over threshold
-	}
+    @Test
+    public void testFindFirstValueGreaterThanOrEqualTo() {
+        ArrayList<Double> values = Lists.newArrayList(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0);
+        double threshold = 2.5;
+        int lowIndex = emaFile.findFirstValueGreaterThanOrEqualTo(threshold, values);
+        assertThat(lowIndex).isEqualTo(2); // 3.0 (index 2) is first over threshold
+    }
 
-	@Test
-	public void testFindLastValueLessThanOrEqualTo() {
-		ArrayList<Double> values = Lists.newArrayList(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0);
-		double threshold = 2.5;
-		int lowIndex = emaFile.findLastValueLessThanOrEqualTo(threshold, values);
-		assertThat(lowIndex).isEqualTo(1); // 2.0 (index 1) is first under threshold
-	}
+    @Test
+    public void testFindLastValueLessThanOrEqualTo() {
+        ArrayList<Double> values = Lists.newArrayList(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0);
+        double threshold = 2.5;
+        int lowIndex = emaFile.findLastValueLessThanOrEqualTo(threshold, values);
+        assertThat(lowIndex).isEqualTo(1); // 2.0 (index 1) is first under threshold
+    }
 }
