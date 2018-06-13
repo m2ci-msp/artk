@@ -1,6 +1,5 @@
 plugins {
     id 'groovy'
-    id 'eclipse'
     id 'maven-publish'
 }
 
