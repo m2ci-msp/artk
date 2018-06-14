@@ -1,11 +1,11 @@
 package org.m2ci.msp.ema;
 
-import static org.fest.assertions.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.Random;
 import java.util.Vector;
 
-import org.fest.assertions.data.Offset;
+import org.assertj.core.data.Offset;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;

@@ -1,6 +1,6 @@
 package org.m2ci.msp.ema;
 
-import static org.fest.assertions.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.ArrayList;
 
