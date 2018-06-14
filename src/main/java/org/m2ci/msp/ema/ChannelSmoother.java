@@ -4,156 +4,156 @@ import java.util.Vector;
 
 public class ChannelSmoother {
 
-	private Vector<Double> m_channelWithBoundaries;
-	private double m_standardDeviation;
-	private int m_sizeOfWindow;
-	private Vector<Double> m_gaussianKernel;
-	private int m_radius;
+    private Vector<Double> m_channelWithBoundaries;
+    private double m_standardDeviation;
+    private int m_sizeOfWindow;
+    private Vector<Double> m_gaussianKernel;
+    private int m_radius;
 
-	public double getStandardDeviation() {
-		return m_standardDeviation;
-	}
+    public double getStandardDeviation() {
+        return m_standardDeviation;
+    }
 
-	public int getSizeOfWindow() {
-		return m_sizeOfWindow;
-	}
+    public int getSizeOfWindow() {
+        return m_sizeOfWindow;
+    }
 
-	public Vector<Double> getGaussianKernel() {
-		return m_gaussianKernel;
-	}
+    public Vector<Double> getGaussianKernel() {
+        return m_gaussianKernel;
+    }
 
-	public int getRadius() {
-		return m_radius;
-	}
+    public int getRadius() {
+        return m_radius;
+    }
 
-	public Vector<Double> getChannelWithBoundaries() {
-		return m_channelWithBoundaries;
-	}
+    public Vector<Double> getChannelWithBoundaries() {
+        return m_channelWithBoundaries;
+    }
 
-	ChannelSmoother(double standardDeviation) {
+    ChannelSmoother(double standardDeviation) {
 
-		m_standardDeviation = standardDeviation;
+        m_standardDeviation = standardDeviation;
 
-		final double multiplier = 3;
+        final double multiplier = 3;
 
-		// rounded up size in each direction of truncated Gaussian
-		m_radius = (int) (multiplier * standardDeviation + 0.5);
+        // rounded up size in each direction of truncated Gaussian
+        m_radius = (int) (multiplier * standardDeviation + 0.5);
 
-		m_sizeOfWindow = 2 * m_radius + 1;
+        m_sizeOfWindow = 2 * m_radius + 1;
 
-		createGaussian();
+        createGaussian();
 
-	}
+    }
 
-	public Vector<Double> smoothChannel(Vector<Double> channel) throws IllegalArgumentException {
+    public Vector<Double> smoothChannel(Vector<Double> channel) throws IllegalArgumentException {
 
-		if (channel.size() < m_radius) {
-			throw new IllegalArgumentException("The signal is too short to be smoothed with selected standard deviation.");
-		}
+        if (channel.size() < m_radius) {
+            throw new IllegalArgumentException("The signal is too short to be smoothed with selected standard deviation.");
+        }
 
-		createChannelWithBoundaries(channel);
+        createChannelWithBoundaries(channel);
 
-		int sampleAmount = channel.size();
+        int sampleAmount = channel.size();
 
-		Vector<Double> result = new Vector<Double>();
-		result.setSize(sampleAmount);
+        Vector<Double> result = new Vector<Double>();
+        result.setSize(sampleAmount);
 
-		for (int i = m_radius; i < sampleAmount + m_radius; ++i) {
+        for (int i = m_radius; i < sampleAmount + m_radius; ++i) {
 
-			final int originalIndex = i - m_radius;
+            final int originalIndex = i - m_radius;
 
-			double smoothedVersion = 0;
+            double smoothedVersion = 0;
 
-			// perform the weighting in the window around the current sample
-			for (int r = -m_radius; r <= m_radius; ++r) {
+            // perform the weighting in the window around the current sample
+            for (int r = -m_radius; r <= m_radius; ++r) {
 
-				final int indexInGaussian = r + m_radius;
-				final double valueOfGaussian = m_gaussianKernel.get(indexInGaussian);
-				final double originalValue = m_channelWithBoundaries.get(i + r);
+                final int indexInGaussian = r + m_radius;
+                final double valueOfGaussian = m_gaussianKernel.get(indexInGaussian);
+                final double originalValue = m_channelWithBoundaries.get(i + r);
 
-				smoothedVersion += valueOfGaussian * originalValue;
+                smoothedVersion += valueOfGaussian * originalValue;
 
-			}
+            }
 
-			result.set(originalIndex, smoothedVersion);
-		}
+            result.set(originalIndex, smoothedVersion);
+        }
 
-		return result;
+        return result;
 
-	}
+    }
 
-	private void createChannelWithBoundaries(Vector<Double> original) {
+    private void createChannelWithBoundaries(Vector<Double> original) {
 
-		// create a copy
-		Vector<Double> result = new Vector<Double>();
+        // create a copy
+        Vector<Double> result = new Vector<Double>();
 
-		result.setSize(original.size() + 2 * m_radius);
+        result.setSize(original.size() + 2 * m_radius);
 
-		// copy original
-		for (int i = 0; i < original.size(); ++i) {
+        // copy original
+        for (int i = 0; i < original.size(); ++i) {
 
-			// add boundary
-			result.set(i + m_radius, original.get(i));
-		}
+            // add boundary
+            result.set(i + m_radius, original.get(i));
+        }
 
-		// now mirror at the boundaries
+        // now mirror at the boundaries
 
-		for (int i = 1; i <= m_radius; ++i) {
+        for (int i = 1; i <= m_radius; ++i) {
 
-			// mirror on the left
-			int mirrorPoint = m_radius;
-			double valueToMirror = result.get(mirrorPoint + i);
+            // mirror on the left
+            int mirrorPoint = m_radius;
+            double valueToMirror = result.get(mirrorPoint + i);
 
-			result.set(mirrorPoint - i, valueToMirror);
+            result.set(mirrorPoint - i, valueToMirror);
 
-			// mirror on the right
-			mirrorPoint = original.size() + m_radius - 1;
-			valueToMirror = result.get(mirrorPoint - i);
+            // mirror on the right
+            mirrorPoint = original.size() + m_radius - 1;
+            valueToMirror = result.get(mirrorPoint - i);
 
-			result.set(mirrorPoint + i, valueToMirror);
+            result.set(mirrorPoint + i, valueToMirror);
 
-		}
+        }
 
-		m_channelWithBoundaries = result;
-	}
+        m_channelWithBoundaries = result;
+    }
 
-	private void createGaussian() {
+    private void createGaussian() {
 
-		m_gaussianKernel = new Vector<Double>();
-		m_gaussianKernel.setSize(m_sizeOfWindow);
+        m_gaussianKernel = new Vector<Double>();
+        m_gaussianKernel.setSize(m_sizeOfWindow);
 
-		final double pi = Math.PI;
+        final double pi = Math.PI;
 
-		// two time saver variables
-		final double ts1 = 2 * m_standardDeviation * m_standardDeviation;
-		final double ts2 = 1. / (Math.sqrt(ts1 * pi));
+        // two time saver variables
+        final double ts1 = 2 * m_standardDeviation * m_standardDeviation;
+        final double ts2 = 1. / (Math.sqrt(ts1 * pi));
 
-		// normalization factor
-		double norm = 0;
+        // normalization factor
+        double norm = 0;
 
-		// precompute values of 1-D Gaussian
-		for (int i = 0; i < m_sizeOfWindow; ++i) {
+        // precompute values of 1-D Gaussian
+        for (int i = 0; i < m_sizeOfWindow; ++i) {
 
-			// center Gaussian
-			final double x = Math.pow(m_radius - i, 2.);
-			final double value = ts2 * Math.exp(-x / ts1);
+            // center Gaussian
+            final double x = Math.pow(m_radius - i, 2.);
+            final double value = ts2 * Math.exp(-x / ts1);
 
-			m_gaussianKernel.set(i, value);
+            m_gaussianKernel.set(i, value);
 
-			// add weight
-			norm += value;
+            // add weight
+            norm += value;
 
-		}
+        }
 
-		// normalize truncated Gaussian
-		for (int i = 0; i < m_sizeOfWindow; ++i) {
+        // normalize truncated Gaussian
+        for (int i = 0; i < m_sizeOfWindow; ++i) {
 
-			final double oldValue = m_gaussianKernel.get(i);
-			final double newValue = oldValue / norm;
+            final double oldValue = m_gaussianKernel.get(i);
+            final double newValue = oldValue / norm;
 
-			m_gaussianKernel.set(i, newValue);
-		}
+            m_gaussianKernel.set(i, newValue);
+        }
 
-	}
+    }
 
 }

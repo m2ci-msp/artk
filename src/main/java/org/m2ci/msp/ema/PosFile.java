@@ -10,39 +10,39 @@ import com.google.common.io.Files;
 
 public abstract class PosFile extends EmaFile {
 
-	// channels and channel names
+    // channels and channel names
 
-	public int getHeaderSize() {
-		return 0;
-	}
+    public int getHeaderSize() {
+        return 0;
+    }
 
-	public static PosFile loadFrom(File file) throws IOException {
-		String firstLine = Files.readFirstLine(file, Charsets.US_ASCII);
-		if (firstLine.startsWith("AG50xDATA")) {
-			return new AG501PosFile(file);
-		} else {
-			return new AG500PosFile(file);
-		}
-	}
+    public static PosFile loadFrom(File file) throws IOException {
+        String firstLine = Files.asCharSource(file, Charsets.US_ASCII).readFirstLine();
+        if (firstLine.startsWith("AG50xDATA")) {
+            return new AG501PosFile(file);
+        } else {
+            return new AG500PosFile(file);
+        }
+    }
 
-	public static PosFile loadFrom(String path) throws IOException {
-		File file = new File(path);
-		return loadFrom(file);
-	}
+    public static PosFile loadFrom(String path) throws IOException {
+        File file = new File(path);
+        return loadFrom(file);
+    }
 
-	abstract public int getNumberOfFieldsPerChannel();
+    abstract public int getNumberOfFieldsPerChannel();
 
-	public void setData(SimpleMatrix newData) {
-		if (newData.getNumElements() == 0) {
-			throw new IllegalArgumentException("Cannot set empty data");
-		}
-		data = newData;
-		numberOfChannels = data.numCols() / getNumberOfFieldsPerChannel();
-		updateTimes();
-	}
+    public void setData(SimpleMatrix newData) {
+        if (newData.getNumElements() == 0) {
+            throw new IllegalArgumentException("Cannot set empty data");
+        }
+        data = newData;
+        numberOfChannels = data.numCols() / getNumberOfFieldsPerChannel();
+        updateTimes();
+    }
 
-	@Override
-	public void setSamplingFrequency(double newSamplingFrequency) {
-		throw new UnsupportedOperationException("The sampling frequency cannot be changed");
-	}
+    @Override
+    public void setSamplingFrequency(double newSamplingFrequency) {
+        throw new UnsupportedOperationException("The sampling frequency cannot be changed");
+    }
 }

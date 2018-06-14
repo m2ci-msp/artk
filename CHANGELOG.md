@@ -7,6 +7,7 @@ ArTK Changelog
 ### Changed
 
 - build with Gradle 4.8
+- upgrade Guava and EJML dependencies
 - migrate testing from JUnit 4 with FEST-Assert to JUnit 5 Jupiter with AssertJ
 - [all changes since v0.5]
 
