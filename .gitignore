@@ -11,9 +11,5 @@ build/
 .idea/
 *.iml
 
-# Git
-*.orig
-
 # OSX
 .DS_Store
-/target/
