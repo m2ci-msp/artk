@@ -1,13 +1,14 @@
 package org.m2ci.msp.ema.est
 
-import org.junit.*
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class ESTNaNRemoverTest {
 
     ArrayList<Float> values
     ESTNaNRemover remover
 
-    @Before
+    @BeforeEach
     void setUp() {
         values = -5..5
         remover = new ESTNaNRemover()

@@ -1,7 +1,8 @@
 package org.m2ci.msp.ema
 
 import org.ejml.simple.SimpleMatrix
-import org.junit.*
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.m2ci.msp.ema.est.ESTParser
 
 class ESTFileTest {
@@ -20,7 +21,7 @@ class ESTFileTest {
         return tmpFile
     }
 
-    @Before
+    @BeforeEach
     void unpackTestFiles() {
         estBinaryFile = unpackTestFile('/esttrack.bin')
         posBinaryFile = unpackTestFile('/ag500.pos')
