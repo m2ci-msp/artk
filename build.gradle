@@ -7,8 +7,8 @@ group 'org.m2ci.msp'
 version '0.6-SNAPSHOT'
 description 'Articulatory data ToolKit'
 
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 repositories {
     jcenter()
