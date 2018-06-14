@@ -16,7 +16,7 @@ repositories {
 
 dependencies {
     compileOnly localGroovy()
-    compile group: 'com.google.guava', name: 'guava', version: '16.0.1'
+    compile group: 'com.google.guava', name: 'guava', version: '25.1-jre'
     compile group: 'com.googlecode.efficient-java-matrix-library', name: 'ejml', version: '0.24'
     testCompile localGroovy()
     testCompile group: 'org.assertj', name: 'assertj-core', version: '3.10.0'
