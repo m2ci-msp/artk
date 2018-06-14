@@ -77,7 +77,6 @@ public class AG500PosFile extends PosFile {
     }
 
     protected void writeHeader(OutputStream stream) throws IOException {
-        return;
     }
 
     public AG500PosFile withChannelNames(ArrayList<String> newChannelNames) {

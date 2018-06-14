@@ -97,7 +97,6 @@ public class AG501PosFile extends AG500PosFile {
     protected void writeHeader(OutputStream stream) throws IOException {
         byte[] bytes = getHeader().toString().getBytes();
         stream.write(bytes);
-        return;
     }
 
     @Override
