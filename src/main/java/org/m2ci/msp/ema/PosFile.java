@@ -17,7 +17,7 @@ public abstract class PosFile extends EmaFile {
     }
 
     public static PosFile loadFrom(File file) throws IOException {
-        String firstLine = Files.readFirstLine(file, Charsets.US_ASCII);
+        String firstLine = Files.asCharSource(file, Charsets.US_ASCII).readFirstLine();
         if (firstLine.startsWith("AG50xDATA")) {
             return new AG501PosFile(file);
         } else {

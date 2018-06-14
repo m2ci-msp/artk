@@ -2,6 +2,7 @@ package org.m2ci.msp.ema;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import org.ejml.simple.SimpleMatrix;
 
@@ -101,7 +102,7 @@ public abstract class EmaFile {
         return times.get(times.size() - 1);
     }
 
-    protected int findFirstValueGreaterThanOrEqualTo(double value, ArrayList<Double> values) {
+    protected int findFirstValueGreaterThanOrEqualTo(double value, List<Double> values) {
         for (int i = 0; i < values.size(); i++) {
             if (values.get(i) >= value) {
                 return i;
@@ -110,7 +111,7 @@ public abstract class EmaFile {
         return -1;
     }
 
-    protected int findLastValueLessThanOrEqualTo(double value, ArrayList<Double> values) {
+    protected int findLastValueLessThanOrEqualTo(double value, List<Double> values) {
         for (int i = values.size() - 1; i >= 0; i--) {
             if (values.get(i) <= value) {
                 return i;

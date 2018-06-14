@@ -54,7 +54,7 @@ public class AG500PosFileTest {
     public void testFrameFieldNames() throws URISyntaxException, IOException {
         ArrayList<String> frameFieldNames = posFile.getFrameFieldNames();
         File txtFile = new File(Resources.getResource("ag500.txt").toURI());
-        String headerLine = Files.readFirstLine(txtFile, Charsets.US_ASCII);
+        String headerLine = Files.asCharSource(txtFile, Charsets.US_ASCII).readFirstLine();
         ArrayList<String> headerFields = Lists.newArrayList(headerLine.split("\t"));
         assertThat(frameFieldNames).isEqualTo(headerFields);
     }

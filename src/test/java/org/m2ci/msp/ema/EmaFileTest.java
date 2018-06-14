@@ -2,13 +2,10 @@ package org.m2ci.msp.ema;
 
 import static org.assertj.core.api.Assertions.*;
 
-import java.util.ArrayList;
-
+import com.google.common.collect.ImmutableList;
 import org.ejml.simple.SimpleMatrix;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import com.google.common.collect.Lists;
 
 public class EmaFileTest {
 
@@ -36,7 +33,7 @@ public class EmaFileTest {
 
     @Test
     public void testFindFirstValueGreaterThanOrEqualTo() {
-        ArrayList<Double> values = Lists.newArrayList(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0);
+        ImmutableList<Double> values = ImmutableList.of(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0);
         double threshold = 2.5;
         int lowIndex = emaFile.findFirstValueGreaterThanOrEqualTo(threshold, values);
         assertThat(lowIndex).isEqualTo(2); // 3.0 (index 2) is first over threshold
@@ -44,7 +41,7 @@ public class EmaFileTest {
 
     @Test
     public void testFindLastValueLessThanOrEqualTo() {
-        ArrayList<Double> values = Lists.newArrayList(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0);
+        ImmutableList<Double> values = ImmutableList.of(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0);
         double threshold = 2.5;
         int lowIndex = emaFile.findLastValueLessThanOrEqualTo(threshold, values);
         assertThat(lowIndex).isEqualTo(1); // 2.0 (index 1) is first under threshold
