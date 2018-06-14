@@ -5,8 +5,8 @@ import static org.assertj.core.api.Assertions.*;
 import java.util.ArrayList;
 
 import org.ejml.simple.SimpleMatrix;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.google.common.collect.Lists;
 
@@ -14,7 +14,7 @@ public class EmaFileTest {
 
     private EmaFile emaFile;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         emaFile = new EmaFile() {
             @Override

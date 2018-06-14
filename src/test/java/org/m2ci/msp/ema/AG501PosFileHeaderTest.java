@@ -7,9 +7,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.m2ci.msp.ema.AG501PosFileHeader;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.google.common.io.Resources;
 
@@ -17,7 +16,7 @@ public class AG501PosFileHeaderTest {
 
     private AG501PosFileHeader header;
 
-    @Before
+    @BeforeEach
     public void setUp() throws IOException, URISyntaxException {
         URI resource = Resources.getResource("ag501.pos").toURI();
         File file = new File(resource);

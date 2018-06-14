@@ -6,19 +6,19 @@ import java.util.Random;
 import java.util.Vector;
 
 import org.assertj.core.data.Offset;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 public class ChannelSmootherTest {
 
     private ChannelSmoother smoother;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpBeforeClass() throws Exception {
     }
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
     }
 
@@ -90,7 +90,7 @@ public class ChannelSmootherTest {
 
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void signalTooShortTest() {
         smoother = new ChannelSmoother(9);
 
@@ -101,7 +101,12 @@ public class ChannelSmootherTest {
         channel.add(1.);
         channel.add(1.);
         channel.add(1.);
-        smoother.smoothChannel(channel);
+        try {
+            smoother.smoothChannel(channel);
+            failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
+        } catch (IllegalArgumentException e) {
+            assertThat(e).hasMessage("The signal is too short to be smoothed with selected standard deviation.");
+        }
     }
 
     @Test

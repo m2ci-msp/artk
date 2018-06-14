@@ -12,13 +12,9 @@ import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.EjmlUnitTests;
 import org.ejml.ops.MatrixIO;
 
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-
-import org.m2ci.msp.ema.AG500PosFile;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
@@ -29,20 +25,17 @@ public class AG500PosFileTest {
 
     static final int NUMBER_OF_CHANNELS = 12;
 
-    @Rule
-    public TemporaryFolder tempFolder = new TemporaryFolder();
-
     private static File file;
 
     private AG500PosFile posFile;
 
-    @BeforeClass
+    @BeforeAll
     public static void oneTimeSetup() throws URISyntaxException {
         URI resource = Resources.getResource("ag500.pos").toURI();
         file = new File(resource);
     }
 
-    @Before
+    @BeforeEach
     public void setUp() throws IOException {
         posFile = new AG500PosFile(file);
     }
@@ -100,7 +93,7 @@ public class AG500PosFileTest {
 
     @Test
     public void testSaveTxt() throws IOException, URISyntaxException {
-        File tmpFile = tempFolder.newFile();
+        File tmpFile = File.createTempFile("expected", ".txt");
         posFile.asText().withPrecision(2).writeTo(tmpFile);
         URI resource = Resources.getResource("ag500.txt").toURI();
         File txtFile = new File(resource);
@@ -109,7 +102,7 @@ public class AG500PosFileTest {
 
     @Test
     public void testSaveBvh() throws IOException, URISyntaxException {
-        File tmpFile = tempFolder.newFile();
+        File tmpFile = File.createTempFile("expected", ".bvh");
         posFile.asBvh().withPrecision(1).writeTo(tmpFile);
         URI resource = Resources.getResource("ag500.bvh").toURI();
         File bvhFile = new File(resource);
@@ -118,7 +111,7 @@ public class AG500PosFileTest {
 
     @Test
     public void testSavePos() throws IOException, URISyntaxException {
-        File tmpFile = tempFolder.newFile();
+        File tmpFile = File.createTempFile("expected", ".pos");
         posFile.writeTo(tmpFile);
         URI resource = Resources.getResource("ag500.pos").toURI();
         File posFile = new File(resource);
