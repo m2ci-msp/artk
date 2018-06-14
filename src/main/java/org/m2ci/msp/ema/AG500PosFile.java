@@ -11,7 +11,6 @@ import java.nio.channels.Channels;
 import java.nio.channels.WritableByteChannel;
 import java.util.ArrayList;
 
-import org.ejml.data.DenseMatrix64F;
 import org.ejml.simple.SimpleMatrix;
 
 import com.google.common.collect.Lists;
@@ -46,8 +45,8 @@ public class AG500PosFile extends PosFile {
         int numCols = getNumberOfFieldsPerFrame();
         int numRows = doubles.length / numCols;
         assert numCols * numRows == doubles.length;
-        DenseMatrix64F data = DenseMatrix64F.wrap(numRows, numCols, doubles);
-        return SimpleMatrix.wrap(data);
+        SimpleMatrix data = new SimpleMatrix(numRows, numCols, true, doubles);
+        return data;
     }
 
     public void writeTo(File file) throws IOException {

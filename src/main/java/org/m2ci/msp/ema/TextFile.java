@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
 
-import org.ejml.data.MatrixIterator;
+import org.ejml.data.DMatrixIterator;
 import org.ejml.simple.SimpleMatrix;
 
 import com.google.common.base.Charsets;
@@ -65,7 +65,7 @@ public class TextFile extends EmaFile {
             }
             int numCols = data.numCols();
             ArrayList<String> formattedFields = Lists.newArrayListWithCapacity(numCols);
-            MatrixIterator fields = data.iterator(true, row, 0, row, numCols - 1);
+            DMatrixIterator fields = data.iterator(true, row, 0, row, numCols - 1);
             while (fields.hasNext()) {
                 formattedFields.add(String.format(format, fields.next()));
             }

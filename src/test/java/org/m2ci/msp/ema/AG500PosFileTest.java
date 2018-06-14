@@ -8,8 +8,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
-import org.ejml.data.DenseMatrix64F;
-import org.ejml.ops.EjmlUnitTests;
+import org.ejml.EjmlUnitTests;
+import org.ejml.data.DMatrixRMaj;
 import org.ejml.ops.MatrixIO;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -74,8 +74,8 @@ public class AG500PosFileTest {
     @Test
     public void testExtractChannel() throws URISyntaxException, IOException {
         URI resource = Resources.getResource("ag500ch03.csv").toURI();
-        DenseMatrix64F channel3 = MatrixIO.loadCSV(resource.getPath());
-        DenseMatrix64F extractedChannel = posFile.extractChannel(2).data.getMatrix();
+        DMatrixRMaj channel3 = MatrixIO.loadCSV(resource.getPath(), true);
+        DMatrixRMaj extractedChannel = posFile.extractChannel(2).data.getMatrix();
         EjmlUnitTests.assertEquals(extractedChannel, channel3, 0.01);
     }
 
