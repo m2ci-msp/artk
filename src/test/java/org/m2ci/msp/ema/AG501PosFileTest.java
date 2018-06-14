@@ -78,7 +78,7 @@ public class AG501PosFileTest {
         posFile.asText().withPrecision(2).writeTo(tmpFile);
         URI resource = Resources.getResource("ag501.txt").toURI();
         File txtFile = new File(resource);
-        assertThat(tmpFile).hasContentEqualTo(txtFile);
+        assertThat(tmpFile).hasSameContentAs(txtFile);
     }
 
     @Test
@@ -87,7 +87,7 @@ public class AG501PosFileTest {
         posFile.asBvh().withPrecision(1).writeTo(tmpFile);
         URI resource = Resources.getResource("ag501.bvh").toURI();
         File bvhFile = new File(resource);
-        assertThat(tmpFile).hasContentEqualTo(bvhFile);
+        assertThat(tmpFile).hasSameContentAs(bvhFile);
     }
 
     @Test
@@ -96,7 +96,7 @@ public class AG501PosFileTest {
         posFile.asJson().withTimes().writeTo(tmpFile);
         URI resource = Resources.getResource("ag501.json").toURI();
         File jsonFile = new File(resource);
-        assertThat(tmpFile).hasContentEqualTo(jsonFile);
+        assertThat(tmpFile).hasSameContentAs(jsonFile);
     }
 
     @Test

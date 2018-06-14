@@ -133,8 +133,8 @@ public class ChannelSmootherTest {
 
         Vector<Double> result = smoother.smoothChannel(channel);
 
-        for (int i = 0; i < result.size(); ++i) {
-            assertThat(result.get(i)).isEqualTo(mean, Offset.offset(10.));
+        for (Double aResult : result) {
+            assertThat(aResult).isEqualTo(mean, Offset.offset(10.));
         }
 
     }

@@ -97,7 +97,7 @@ public class AG500PosFileTest {
         posFile.asText().withPrecision(2).writeTo(tmpFile);
         URI resource = Resources.getResource("ag500.txt").toURI();
         File txtFile = new File(resource);
-        assertThat(tmpFile).hasContentEqualTo(txtFile);
+        assertThat(tmpFile).hasSameContentAs(txtFile);
     }
 
     @Test
@@ -106,7 +106,7 @@ public class AG500PosFileTest {
         posFile.asBvh().withPrecision(1).writeTo(tmpFile);
         URI resource = Resources.getResource("ag500.bvh").toURI();
         File bvhFile = new File(resource);
-        assertThat(tmpFile).hasContentEqualTo(bvhFile);
+        assertThat(tmpFile).hasSameContentAs(bvhFile);
     }
 
     @Test
