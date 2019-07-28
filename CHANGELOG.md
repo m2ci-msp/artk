@@ -4,6 +4,10 @@ ArTK Changelog
 [Unreleased]
 ------------
 
+### Added
+
+- support for Java 9 through 12
+
 ### Changed
 
 - build with Gradle 4.8
